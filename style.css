@@ -1,0 +1,64 @@
+* {
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+
+/* Importa a fonte Geist */
+@font-face {
+  font-family: 'Geist';
+  src: url('./fonts/Geist-Bold.ttf') format('truetype');
+  font-weight: 700; /* Bold */
+  font-style: normal;
+}
+
+body {
+  background: #111;
+  font-family: 'Geist', Arial, sans-serif; /* Usa Geist primeiro, depois Arial como fallback */
+}
+
+.menu {
+  position: relative;
+  display: inline-block;
+}
+
+.menu > a {
+  color: white;
+  text-decoration: underline;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.submenu {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  flex-direction: column;
+  margin-top: 10px;
+  position: absolute;
+  left: 0;
+  transition: all 0.4s ease;
+  transform: translateY(-10px);
+}
+
+.submenu a {
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+  margin: 4px 0;
+}
+
+/* agora funciona no menu e no submenu */
+.menu:hover .submenu {
+  max-height: 500px; /* altura suficiente */
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.submenu a:hover {
+  text-decoration: underline;
+}
+
+.MenuOfc {
+  font-family: 'Geist', Arial, sans-serif;
+}

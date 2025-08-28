@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogos de Charada - Librali</title>
+    <style>
+        * {
+            padding: 0;
+            border: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: 'Geist';
+            src: url('./fonts/Geist-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        body {
+            background: white;
+            font-family: 'Geist', Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: white;
+        }
+
+        header > a {
+            font-size: 32px;
+            font-weight: bold;
+            color: black;
+            text-decoration: none;
+        }
+
+        .menu {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu > a {
+            color: black;
+            text-decoration: none;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .submenu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            min-width: 150px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .menu:hover .submenu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .submenu a {
+            display: block;
+            color: black;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .submenu a:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Game Container */
+        .game-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .game-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            color: black;
+        }
+
+        .progress {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #666;
+        }
+
+        /* Sign Display Area */
+        .sign-display {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .sign-image {
+            width: 300px;
+            height: 200px;
+            background-color: #e0e0e0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Options Grid */
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .option {
+            background-color: #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: black;
+        }
+
+        .option:hover {
+            background-color: #d0d0d0;
+            transform: translateY(-2px);
+        }
+
+        .option.correct {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .option.incorrect {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        /* Feedback and Controls */
+        .game-controls {
+            text-align: center;
+        }
+
+        .feedback {
+            font-size: 20px;
+            margin-bottom: 20px;
+            min-height: 30px;
+            font-weight: bold;
+        }
+
+        .next-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: none;
+        }
+
+        .next-btn:hover {
+            background-color: #45a049;
+        }
+
+        .final-score {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html">Librali</a>
+        <div class="menu">
+            <a href="#">menu</a>
+            <div class="submenu">
+                <a href="index.html">Início</a>
+                <a href="#">Sobre Nós</a>
+                <a href="#">Cursos</a>
+                <a href="jogos.html">Jogos</a>
+                <a href="#">Dicionário</a>
+                <a href="#">Entrar</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="game-container">
+        <h1 class="game-title">Jogo de Charada em LIBRAS</h1>
+        
+        <div class="progress" id="progress">Fase 1 de 5</div>
+        
+        <div class="sign-display">
+            <div class="sign-image" id="signImage">
+                Imagem do sinal em LIBRAS
+            </div>
+        </div>
+        
+        <div class="options-container" id="optionsContainer">
+            <!-- As opções serão preenchidas pelo JavaScript -->
+        </div>
+        
+        <div class="game-controls">
+            <div class="feedback" id="feedback"></div>
+            <button class="next-btn" id="nextBtn">Próxima Fase</button>
+        </div>
+    </div>
+
+    <script>
+        // Fases do jogo
+        const phases = [
+            {
+                question: "Casa",
+                options: ["Escola", "Casa", "Trabalho", "Parque"],
+                correctIndex: 1
+            },
+            {
+                question: "Amor",
+                options: ["Amor", "Ódio", "Tristeza", "Alegria"],
+                correctIndex: 0
+            },
+            {
+                question: "Água",
+                options: ["Fogo", "Terra", "Água", "Ar"],
+                correctIndex: 2
+            },
+            {
+                question: "Livro",
+                options: ["Caneta", "Livro", "Caderno", "Lápis"],
+                correctIndex: 1
+            },
+            {
+                question: "Computador",
+                options: ["Telefone", "Tablet", "Computador", "Televisão"],
+                correctIndex: 2
+            }
+        ];
+
+        let currentPhase = 0;
+        let score = 0;
+
+        const signImage = document.getElementById('signImage');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const feedback = document.getElementById('feedback');
+        const nextBtn = document.getElementById('nextBtn');
+        const progress = document.getElementById('progress');
+
+        // Inicializa o jogo
+        function initGame() {
+            progress.textContent = `Fase ${currentPhase + 1} de ${phases.length}`;
+            signImage.textContent = `Sinal para: ${phases[currentPhase].question}`;
+            
+            optionsContainer.innerHTML = '';
+            phases[currentPhase].options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => checkAnswer(index));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            feedback.textContent = '';
+            nextBtn.style.display = 'none';
+        }
+
+        // Verifica a resposta
+        function checkAnswer(selectedIndex) {
+            const correctIndex = phases[currentPhase].correctIndex;
+            const options = document.querySelectorAll('.option');
+            
+            // Desabilita todas as opções
+            options.forEach((option, index) => {
+                option.classList.add('disabled');
+                
+                if (index === correctIndex) {
+                    option.classList.add('correct');
+                } else if (index === selectedIndex) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            if (selectedIndex === correctIndex) {
+                feedback.textContent = 'Correto! Parabéns!';
+                feedback.style.color = '#4CAF50';
+                score++;
+            } else {
+                feedback.textContent = `Ops! A resposta correta é: ${phases[currentPhase].options[correctIndex]}`;
+                feedback.style.color = '#f44336';
+            }
+            
+            // Mostra o botão de próxima fase se não for a última
+            if (currentPhase < phases.length - 1) {
+                nextBtn.style.display = 'inline-block';
+            } else {
+                showFinalScore();
+            }
+        }
+
+        // Mostra a pontuação final
+        function showFinalScore() {
+            feedback.innerHTML = `
+                <div class="final-score">Fim do jogo!</div>
+                <div>Você acertou ${score} de ${phases.length} questões.</div>
+            `;
+            feedback.style.color = '#333';
+        }
+
+        // Avança para a próxima fase
+        nextBtn.addEventListener('click', () => {
+            currentPhase++;
+            initGame();
+        });
+
+        // Inicia o jogo
+        initGame();
+    </script>
+</body>
+</html>
