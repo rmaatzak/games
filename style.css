@@ -53,6 +53,16 @@ body {
             white-space: nowrap;
         }
 
+
+           .Librali {
+        margin-left: 50px;
+         transition: all 0.4s ease;
+        transform: translateY(-10px);
+      }
+
+      .Librali:hover{
+         font-size: 33px;
+      }
         /* agora funciona no menu e no submenu */
         .menu:hover .submenu {
             max-height: 500px; /* altura suficiente */
