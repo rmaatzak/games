@@ -42,10 +42,15 @@
         text-decoration: none;
       }
 
+      a{
+        text-decoration: none;
+      }
+
       .menu {
         position: relative;
         display: inline-block;
         margin-right: 50px;
+        text-decoration: none;
       }
 
       .menu > a {
@@ -101,6 +106,8 @@
         max-width: 900px;
         margin: 40px auto;
         padding: 0 20px;
+        opacity: 1;
+        transition: opacity 0.5s ease;
       }
 
       .game-title {
@@ -269,6 +276,74 @@
         text-align: center;
       }
 
+      /* Start Overlay */
+      .start-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        transition: opacity 0.5s ease;
+      }
+
+      .start-content {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        padding: 50px 60px;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 500px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transform: translateY(0);
+        animation: startSlideIn 0.6s ease-out;
+      }
+
+      .start-content h1 {
+        font-size: 32px;
+        margin-bottom: 20px;
+        color: #2c3e50;
+        font-weight: bold;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .start-content p {
+        font-size: 18px;
+        margin-bottom: 30px;
+        color: #6c757d;
+        line-height: 1.6;
+      }
+
+      #startButton {
+        background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 16px 45px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+        letter-spacing: 0.5px;
+      }
+
+      #startButton:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+      }
+
+      #startButton:active {
+        transform: translateY(0);
+        box-shadow: 0 3px 10px rgba(33, 150, 243, 0.3);
+      }
+
       /* Animations */
       @keyframes fadeIn {
         from {
@@ -290,6 +365,22 @@
         }
       }
 
+      @keyframes startSlideIn {
+        from {
+          transform: translateY(-30px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .game-container.blurred {
+        filter: blur(5px);
+        pointer-events: none;
+      }
+
     </style>
   </head>
   <body>
@@ -308,7 +399,16 @@
       </div>
     </header>
 
-    <div class="game-container">
+    <!-- Start Overlay -->
+    <div id="startOverlay" class="start-overlay">
+      <div class="start-content">
+        <h1>Jogo de Charada em LIBRAS</h1>
+        <p>Teste seus conhecimentos da Língua Brasileira de Sinais! Escolha a opção correta que corresponde ao sinal mostrado. Um jeito divertido de aprender e praticar LIBRAS!</p>
+        <button id="startButton">Iniciar Jogo</button>
+      </div>
+    </div>
+
+    <div class="game-container" id="gameContainer">
       <h1 class="game-title">Jogo de Charada em LIBRAS</h1>
 
       <div class="progress" id="progress">Fase 1 de 5</div>
@@ -339,6 +439,11 @@
     </div>
 
     <script>
+              // Elementos do overlay inicial
+              const startOverlay = document.getElementById('startOverlay');
+              const startButton = document.getElementById('startButton');
+              const gameContainer = document.getElementById('gameContainer');
+
               // Fases do jogo
               const phases = [
                   {
@@ -366,7 +471,6 @@
                       options: ["Telefone", "Tablet", "Computador", "Televisão"],
                       correctIndex: 2
                   },
-
                   {
           question: "Cachorro",
           options: ["Gato", "Cavalo", "Cachorro", "Pássaro"],
@@ -395,7 +499,6 @@
 
               ];
 
-
               let currentPhase = 0;
               let score = 0;
 
@@ -406,6 +509,19 @@
               const notificationDetails = document.getElementById('notificationDetails');
               const notificationBtn = document.getElementById('notificationBtn');
               const progress = document.getElementById('progress');
+
+              // Evento para iniciar o jogo
+              startButton.addEventListener('click', () => {
+                  // Esconde o overlay com animação
+                  startOverlay.style.opacity = '0';
+                  startOverlay.style.pointerEvents = 'none';
+                  
+                  // Remove o blur do conteúdo do jogo
+                  gameContainer.classList.remove('blurred');
+                  
+                  // Inicia o jogo após pequeno delay para a animação
+                  setTimeout(initGame, 300);
+              });
 
               // Inicializa o jogo
               function initGame() {
@@ -525,9 +641,7 @@
                       // hideNotification();
                   }
               });
-
-              // Inicia o jogo
-              initGame();
     </script>
   </body>
 </html>
+
