@@ -32,6 +32,7 @@
             align-items: center;
             padding: 20px 40px;
             background: white;
+            margin-top: 20px;
         }
 
         header > a {
@@ -45,14 +46,14 @@
             position: relative;
             display: inline-block;
             margin-right: 50px;
-            width: 100px;
+         
         }
 
         .menu > a {
             color: black;
             font-size: 20px;
             cursor: pointer;
-            width: 100px;
+          
         }
 
         .submenu {
@@ -170,44 +171,121 @@
             opacity: 0.7;
         }
 
-        /* Feedback and Controls */
+        /* Modal/Notification Overlay */
+        .notification-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .notification-modal {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .notification-message {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .notification-message.correct {
+            color: #4CAF50;
+        }
+
+        .notification-message.incorrect {
+            color: #c93e35;
+        }
+
+        .notification-details {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .notification-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .notification-btn:hover {
+            background-color: #166dc4;
+        }
+
+        .notification-btn.final {
+            background-color: #2196F3;
+        }
+
+        .notification-btn.final:hover {
+            background-color: #1976D2;
+        }
+
+        /* Feedback and Controls - Hidden now */
         .game-controls {
             text-align: center;
         }
 
         .feedback {
-            font-size: 20px;
-            margin-bottom: 20px;
-            min-height: 30px;
-            font-weight: bold;
-        }
-
-        .next-btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 24px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
             display: none;
         }
 
-        .next-btn:hover {
-            background-color: #45a049;
+        .next-btn {
+            display: none;
         }
 
         .final-score {
             font-size: 24px;
             font-weight: bold;
             margin: 20px 0;
+            text-align: center;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .Librali{
+            margin-left: 50px;
         }
     </style>
 </head>
 <body>
     <header>
-        <a href="index.html">Librali</a>
+        <a href="index.html" class="Librali">Librali</a>
         <div class="menu">
             <a href="#1">menu</a>
             <div class="submenu">
@@ -239,6 +317,15 @@
         <div class="game-controls">
             <div class="feedback" id="feedback"></div>
             <button class="next-btn" id="nextBtn">Próxima Fase</button>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div class="notification-overlay" id="notificationOverlay">
+        <div class="notification-modal">
+            <div class="notification-message" id="notificationMessage"></div>
+            <div class="notification-details" id="notificationDetails"></div>
+            <button class="notification-btn" id="notificationBtn">Próxima Fase</button>
         </div>
     </div>
 
@@ -277,8 +364,10 @@
 
         const signImage = document.getElementById('signImage');
         const optionsContainer = document.getElementById('optionsContainer');
-        const feedback = document.getElementById('feedback');
-        const nextBtn = document.getElementById('nextBtn');
+        const notificationOverlay = document.getElementById('notificationOverlay');
+        const notificationMessage = document.getElementById('notificationMessage');
+        const notificationDetails = document.getElementById('notificationDetails');
+        const notificationBtn = document.getElementById('notificationBtn');
         const progress = document.getElementById('progress');
 
         // Inicializa o jogo
@@ -295,8 +384,30 @@
                 optionsContainer.appendChild(optionElement);
             });
             
-            feedback.textContent = '';
-            nextBtn.style.display = 'none';
+            hideNotification();
+        }
+
+        // Mostra notificação
+        function showNotification(isCorrect, message, details = '') {
+            notificationMessage.textContent = message;
+            notificationMessage.className = `notification-message ${isCorrect ? 'correct' : 'incorrect'}`;
+            notificationDetails.textContent = details;
+            
+            // Configurar botão baseado na fase
+            if (currentPhase < phases.length - 1) {
+                notificationBtn.textContent = 'Próxima Fase';
+                notificationBtn.className = 'notification-btn';
+            } else {
+                notificationBtn.textContent = 'Ver Resultado Final';
+                notificationBtn.className = 'notification-btn final';
+            }
+            
+            notificationOverlay.style.display = 'flex';
+        }
+
+        // Esconde notificação
+        function hideNotification() {
+            notificationOverlay.style.display = 'none';
         }
 
         // Verifica a resposta
@@ -316,35 +427,66 @@
             });
             
             if (selectedIndex === correctIndex) {
-                feedback.textContent = 'Correto! Parabéns!';
-                feedback.style.color = '#4CAF50';
                 score++;
+                showNotification(true, 'Correto! Parabéns! ');
             } else {
-                feedback.textContent = `Ops! A resposta correta é: ${phases[currentPhase].options[correctIndex]}`;
-                feedback.style.color = '#f44336';
-            }
-            
-            // Mostra o botão de próxima fase se não for a última
-            if (currentPhase < phases.length - 1) {
-                nextBtn.style.display = 'inline-block';
-            } else {
-                showFinalScore();
+                showNotification(false, 'Ops! Resposta incorreta', 
+                    `A resposta correta é: ${phases[currentPhase].options[correctIndex]}`);
             }
         }
 
         // Mostra a pontuação final
         function showFinalScore() {
-            feedback.innerHTML = `
-                <div class="final-score">Fim do jogo!</div>
-                <div>Você acertou ${score} de ${phases.length} questões.</div>
-            `;
-            feedback.style.color = '#333';
+            const percentage = Math.round((score / phases.length) * 100);
+            let emoji = '';
+            let message = '';
+            
+            if (percentage === 100) {
+                emoji = '🏆';
+                message = 'Perfeito!';
+            } else if (percentage >= 80) {
+                emoji = '🎉';
+                message = 'Muito bem!';
+            } else if (percentage >= 60) {
+                emoji = '👍';
+                message = 'Bom trabalho!';
+            } else {
+                emoji = '💪';
+                message = 'Continue praticando!';
+            }
+            
+            notificationMessage.innerHTML = `${message} ${emoji}`;
+            notificationMessage.className = 'notification-message correct';
+            notificationDetails.innerHTML = `Você acertou <strong>${score}</strong> de <strong>${phases.length}</strong> questões<br>(${percentage}% de acerto)`;
+            notificationBtn.textContent = 'Jogar Novamente';
+            notificationBtn.className = 'notification-btn final';
+            
+            notificationOverlay.style.display = 'flex';
         }
 
-        // Avança para a próxima fase
-        nextBtn.addEventListener('click', () => {
-            currentPhase++;
-            initGame();
+        // Event listener para o botão da notificação
+        notificationBtn.addEventListener('click', () => {
+            if (currentPhase < phases.length - 1) {
+                // Próxima fase
+                currentPhase++;
+                initGame();
+            } else if (notificationBtn.textContent === 'Ver Resultado Final') {
+                // Mostrar resultado final
+                showFinalScore();
+            } else {
+                // Reiniciar jogo
+                currentPhase = 0;
+                score = 0;
+                initGame();
+            }
+        });
+
+        // Fechar notificação clicando no overlay
+        notificationOverlay.addEventListener('click', (e) => {
+            if (e.target === notificationOverlay) {
+                // Não permitir fechar clicando fora durante o jogo
+                // hideNotification();
+            }
         });
 
         // Inicia o jogo
