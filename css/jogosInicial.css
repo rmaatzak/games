@@ -1,185 +1,287 @@
-* {
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-body {
-  margin: 0;
-  background: #fff;
-  color: #222;
-}
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: #f8f8f8;
+      color: #2d2d2d;
+      line-height: 1.6;
+    }
 
-.container {
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 0 20px;
-  transition: margin-top 0.4s ease;
-}
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 60px;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-.project {
-  display: flex;
-  align-items: center;
-  margin-bottom: 80px;
-  gap: 40px;
-}
+    .Librali {
+      font-size: 28px;
+      font-weight: 300;
+      color: #2d2d2d;
+      text-decoration: none;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+    }
 
-.project.reverse {
-  flex-direction: row-reverse;
-}
+    .Librali:hover {
+      color: #666;
+      transform: translateY(-2px);
+    }
 
-/* Número grande */
-.number {
-  font-size: 60px;
-  font-weight: 700;
-  color: #000;
-  min-width: 80px;
-  user-select: none;
-}
+    .menu {
+      position: relative;
+    }
 
-/* Conteúdo de texto */
-.content {
-  flex: 1;
-}
+    .menu > a {
+      color: #2d2d2d;
+      font-size: 16px;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 400;
+      cursor: pointer;
+    }
 
-.title {
-  font-weight: 700;
-  font-size: 20px;
-  margin: 0 0 10px;
-  font-style: italic;
-}
+    .submenu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+      border-radius: 5px;
+      padding: 20px 0;
+      min-width: 180px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+    }
 
-.description {
-  font-weight: 300;
-  line-height: 1.5;
-  color: #444;
-  margin-bottom: 15px;
-}
+    .menu:hover .submenu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
 
-/* Link "Ler mais" */
-.link {
-  text-decoration: none;
-  font-weight: 700;
-  color: #d13434;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 12px;
-  transition: color 0.3s ease;
-}
+    .submenu a {
+      display: block;
+      color: #2d2d2d;
+      text-decoration: none;
+      padding: 8px 25px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.2s ease;
+    }
 
-.link:hover {
-  color: #a52828;
-}
+    .submenu a:hover {
+      background: #f5f5f5;
+      color: #666;
+      padding-left: 30px;
+    }
 
-/* Imagem */
-.image {
-  flex: 1;
-  overflow: hidden;
-  border-radius: 5px;
-}
+    /* Container principal */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 80px 60px;
+    }
 
-.image img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-  border-radius: 5px;
-  transition: transform 0.3s ease;
-}
+    /* Projeto */
+    .project {
+      display: grid;
+      grid-template-columns: 100px 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      margin-bottom: 120px;
+      position: relative;
+    }
 
-.image img:hover {
-  transform: scale(1.05);
-}
+    .project.reverse {
+      grid-template-columns: 100px 1fr 1fr;
+    }
 
-/* Responsivo para telas menores */
-@media (max-width: 900px) {
-  .project,
-  .project.reverse {
-    flex-direction: column;
-    text-align: center;
-  }
+    .project.reverse .content {
+      order: 3;
+    }
 
-  .number {
-    font-size: 40px;
-    margin-bottom: 20px;
-  }
+    .project.reverse .image {
+      order: 2;
+    }
 
-  .image,
-  .content {
-    flex: unset;
-  }
-}
+    .project.reverse .number {
+      order: 1;
+    }
 
-.menu {
-  position: relative;
-  display: inline-block;
-  margin-right: 50px;
-  width: 100px;
-}
+    /* Número */
+    .number {
+      font-size: 120px;
+      font-weight: 100;
+      color: #e8e8e8;
+      user-select: none;
+      text-align: center;
+      line-height: 1;
+    }
 
-.menu > a {
-  color: black;
-  font-size: 20px;
-  cursor: pointer;
-  width: 100px;
-}
+    /* Conteúdo */
+    .content {
+      padding: 40px 0;
+    }
 
-.Librali {
-  margin-left: 50px;
-  transition: all 0.4s ease;
-  transform: translateY(-10px);
-}
+    .title {
+      font-size: 32px;
+      font-weight: 300;
+      margin-bottom: 25px;
+      color: #2d2d2d;
+      font-style: italic;
+      letter-spacing: 1px;
+    }
 
-.Librali:hover {
-  font-size: 33px;
-}
+    .description {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #666;
+      margin-bottom: 30px;
+      font-weight: 300;
+    }
 
-.submenu {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  flex-direction: column;
-  margin-top: 10px;
-  position: relative; /* agora empurra o conteúdo */
-  transition: all 0.4s ease;
-  transform: translateY(-10px);
-}
+    .link {
+      display: inline-block;
+      text-decoration: none;
+      color: #2d2d2d;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 500;
+      border-bottom: 2px solid #2d2d2d;
+      padding-bottom: 5px;
+      transition: all 0.3s ease;
+    }
 
-.submenu a {
-  color: black;
-  text-decoration: none;
-  font-size: 20px;
-  margin: 4px 0;
-  transition: font-size 0.4s ease-in-out;
-  white-space: nowrap;
-}
+    .link:hover {
+      color: #666;
+      border-color: #666;
+      transform: translateY(-2px);
+    }
 
-/* agora funciona no menu e no submenu */
-.menu:hover .submenu {
-  max-height: 500px; /* altura suficiente */
-  opacity: 1;
-  transform: translateY(0);
-}
+    /* Imagem */
+    .image {
+      position: relative;
+      overflow: hidden;
+      border-radius: 3px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      transition: all 0.4s ease;
+    }
 
-.submenu > a:hover {
-  font-size: 22px;
-}
+    .image:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
 
-a {
-  text-decoration: none;
-}
+    .image img {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      display: block;
+      transition: all 0.6s ease;
+      filter: grayscale(20%);
+    }
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 40px;
-  background: white;
-  margin-top: 20px;
-}
+    .image:hover img {
+      transform: scale(1.05);
+      filter: grayscale(0%);
+    }
 
-header > a {
-  font-size: 32px;
-  font-weight: bold;
-  color: black;
-  text-decoration: none;
-}
+    /* Responsivo */
+    @media (max-width: 1200px) {
+      .container {
+        padding: 60px 40px;
+      }
+     
+      .project {
+        grid-template-columns: 80px 1fr 1fr;
+        gap: 40px;
+        margin-bottom: 100px;
+      }
+     
+      .number {
+        font-size: 100px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      header {
+        padding: 20px 30px;
+      }
+     
+      .container {
+        padding: 40px 30px;
+      }
+     
+      .project,
+      .project.reverse {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        text-align: center;
+        margin-bottom: 80px;
+      }
+     
+      .project.reverse .content,
+      .project.reverse .image,
+      .project.reverse .number {
+        order: unset;
+      }
+     
+      .number {
+        font-size: 80px;
+        margin-bottom: 20px;
+      }
+     
+      .title {
+        font-size: 28px;
+      }
+     
+      .image img {
+        height: 280px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 15px 20px;
+      }
+     
+      .Librali {
+        font-size: 24px;
+      }
+     
+      .container {
+        padding: 30px 20px;
+      }
+     
+      .number {
+        font-size: 60px;
+      }
+     
+      .title {
+        font-size: 24px;
+      }
+     
+      .description {
+        font-size: 15px;
+      }
+     
+      .image img {
+        height: 240px;
+      }
+    }
