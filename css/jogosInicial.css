@@ -1,287 +1,339 @@
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+* {
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
 
-    body {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      background: #f8f8f8;
-      color: #2d2d2d;
-      line-height: 1.6;
-    }
+/* Importa a fonte Geist */
+@font-face {
+  font-family: 'Geist';
+  src: url('./fonts/Geist-Bold.ttf') format('truetype');
+  font-weight: 700; /* Bold */
+  font-style: normal;
+}
 
-    /* Header */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 30px 60px;
-      background: white;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
+body {
+  background: #fff;
+  font-family: 'Geist', Arial, sans-serif; /* Usa Geist primeiro, depois Arial como fallback */
+}
 
-    .Librali {
-      font-size: 28px;
-      font-weight: 300;
-      color: #2d2d2d;
-      text-decoration: none;
-      letter-spacing: 2px;
-      transition: all 0.3s ease;
-    }
+/* Header com posição fixa para controlar melhor o espaçamento */
+header {
+  position: relative;
+  z-index: 1000;
+  background: #fff;
+  padding: 20px 50px;
+  display: flex;
+  align-items: center;
+}
 
-    .Librali:hover {
-      color: #666;
-      transform: translateY(-2px);
-    }
+.menu {
+  position: relative;
+  display: inline-block;
+  margin-right: 50px;
+  width: 100px;
+}
 
-    .menu {
-      position: relative;
-    }
+.menu > a {
+  color: black;
+  font-size: 20px;
+  cursor: pointer;
+  width: 100px;
+  text-decoration: none;
+}
 
-    .menu > a {
-      color: #2d2d2d;
-      font-size: 16px;
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: 400;
-      cursor: pointer;
-    }
+.submenu {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  flex-direction: column;
+  margin-top: 10px;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  transition: all 0.4s ease;
+  transform: translateY(-10px);
+  padding: 0;
+  min-width: 150px;
+  z-index: 1001;
+}
 
-    .submenu {
-      position: absolute;
-      top: 100%;
-      right: 0;
-      background: white;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.1);
-      border-radius: 5px;
-      padding: 20px 0;
-      min-width: 180px;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-10px);
-      transition: all 0.3s ease;
-    }
+.submenu a {
+  color: black;
+  text-decoration: none;
+  font-size: 18px;
+  margin: 0;
+  padding: 12px 16px;
+  transition: all 0.4s ease-in-out;
+  white-space: nowrap;
+  display: block;
+}
 
-    .menu:hover .submenu {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
+.submenu a:last-child {
+  border-bottom: none;
+}
 
-    .submenu a {
-      display: block;
-      color: #2d2d2d;
-      text-decoration: none;
-      padding: 8px 25px;
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      transition: all 0.2s ease;
-    }
+.submenu a:hover {
+  font-size: 20px;
+  padding-left: 20px;
+}
 
-    .submenu a:hover {
-      background: #f5f5f5;
-      color: #666;
-      padding-left: 30px;
-    }
+.Librali {
+  margin-left: 0;
+  margin-right: auto;
+  transition: all 0.4s ease;
+  text-decoration: none;
+  color: black;
+  font-size: 28px;
+  font-weight: bold;
+}
 
-    /* Container principal */
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 80px 60px;
-    }
+.Librali:hover{
+  font-size: 33px;
+}
 
-    /* Projeto */
-    .project {
-      display: grid;
-      grid-template-columns: 100px 1fr 1fr;
-      gap: 60px;
-      align-items: center;
-      margin-bottom: 120px;
-      position: relative;
-    }
+/* Hover funcionando tanto no menu quanto no submenu */
+.menu:hover .submenu {
+  max-height: 500px; /* altura suficiente */
+  opacity: 1;
+  transform: translateY(0);
+  padding: 8px 0;
+}
 
-    .project.reverse {
-      grid-template-columns: 100px 1fr 1fr;
-    }
+/* Container com transição suave para descer quando o menu abrir */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 80px 60px;
+  transition: transform 0.4s ease, margin-top 0.4s ease;
+}
 
-    .project.reverse .content {
-      order: 3;
-    }
+/* Quando o menu estiver com hover, empurra o container para baixo */
+.menu:hover ~ .container,
+header:has(.menu:hover) + .container {
+  margin-top: 180px; /* Ajuste este valor conforme necessário */
+}
 
-    .project.reverse .image {
-      order: 2;
-    }
+/* Alternativa usando transform se margin-top não funcionar bem */
+.menu:hover + * .container {
+  transform: translateY(180px);
+}
 
-    .project.reverse .number {
-      order: 1;
-    }
+.MenuOfc {
+  font-family: 'Geist', Arial, sans-serif;
+}
 
-    /* Número */
-    .number {
-      font-size: 120px;
-      font-weight: 100;
-      color: #e8e8e8;
-      user-select: none;
-      text-align: center;
-      line-height: 1;
-    }
+/* Projeto */
+.project {
+  display: grid;
+  grid-template-columns: 100px 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  margin-bottom: 120px;
+  position: relative;
+}
 
-    /* Conteúdo */
-    .content {
-      padding: 40px 0;
-    }
+.project.reverse {
+  grid-template-columns: 100px 1fr 1fr;
+}
 
-    .title {
-      font-size: 32px;
-      font-weight: 300;
-      margin-bottom: 25px;
-      color: #2d2d2d;
-      font-style: italic;
-      letter-spacing: 1px;
-    }
+.project.reverse .content {
+  order: 3;
+}
 
-    .description {
-      font-size: 16px;
-      line-height: 1.8;
-      color: #666;
-      margin-bottom: 30px;
-      font-weight: 300;
-    }
+.project.reverse .image {
+  order: 2;
+}
 
-    .link {
-      display: inline-block;
-      text-decoration: none;
-      color: #2d2d2d;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-weight: 500;
-      border-bottom: 2px solid #2d2d2d;
-      padding-bottom: 5px;
-      transition: all 0.3s ease;
-    }
+.project.reverse .number {
+  order: 1;
+}
 
-    .link:hover {
-      color: #666;
-      border-color: #666;
-      transform: translateY(-2px);
-    }
+/* Número */
+.number {
+  font-size: 120px;
+  font-weight: 100;
+  color: #e8e8e8;
+  user-select: none;
+  text-align: center;
+  line-height: 1;
+}
 
-    /* Imagem */
-    .image {
-      position: relative;
-      overflow: hidden;
-      border-radius: 3px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-      transition: all 0.4s ease;
-    }
+/* Conteúdo */
+.content {
+  padding: 40px 0;
+}
 
-    .image:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-    }
+.title {
+  font-size: 32px;
+  font-weight: 300;
+  margin-bottom: 25px;
+  color: #2d2d2d;
+  font-style: italic;
+  letter-spacing: 1px;
+}
 
-    .image img {
-      width: 100%;
-      height: 350px;
-      object-fit: cover;
-      display: block;
-      transition: all 0.6s ease;
-      filter: grayscale(20%);
-    }
+.description {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #666;
+  margin-bottom: 30px;
+  font-weight: 300;
+}
 
-    .image:hover img {
-      transform: scale(1.05);
-      filter: grayscale(0%);
-    }
+.link {
+  display: inline-block;
+  text-decoration: none;
+  color: #2d2d2d;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 500;
+  border-bottom: 2px solid #2d2d2d;
+  padding-bottom: 5px;
+  transition: all 0.3s ease;
+}
 
-    /* Responsivo */
-    @media (max-width: 1200px) {
-      .container {
-        padding: 60px 40px;
-      }
-     
-      .project {
-        grid-template-columns: 80px 1fr 1fr;
-        gap: 40px;
-        margin-bottom: 100px;
-      }
-     
-      .number {
-        font-size: 100px;
-      }
-    }
+.link:hover {
+  color: #666;
+  border-color: #666;
+  transform: translateY(-2px);
+}
 
-    @media (max-width: 900px) {
-      header {
-        padding: 20px 30px;
-      }
-     
-      .container {
-        padding: 40px 30px;
-      }
-     
-      .project,
-      .project.reverse {
-        grid-template-columns: 1fr;
-        gap: 30px;
-        text-align: center;
-        margin-bottom: 80px;
-      }
-     
-      .project.reverse .content,
-      .project.reverse .image,
-      .project.reverse .number {
-        order: unset;
-      }
-     
-      .number {
-        font-size: 80px;
-        margin-bottom: 20px;
-      }
-     
-      .title {
-        font-size: 28px;
-      }
-     
-      .image img {
-        height: 280px;
-      }
-    }
+/* Imagem */
+.image {
+  position: relative;
+  overflow: hidden;
+  border-radius: 3px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  transition: all 0.4s ease;
+}
 
-    @media (max-width: 600px) {
-      header {
-        padding: 15px 20px;
-      }
-     
-      .Librali {
-        font-size: 24px;
-      }
-     
-      .container {
-        padding: 30px 20px;
-      }
-     
-      .number {
-        font-size: 60px;
-      }
-     
-      .title {
-        font-size: 24px;
-      }
-     
-      .description {
-        font-size: 15px;
-      }
-     
-      .image img {
-        height: 240px;
-      }
-    }
+.image:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+.image img {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  display: block;
+  transition: all 0.6s ease;
+  filter: grayscale(20%);
+}
+
+.image:hover img {
+  transform: scale(1.05);
+  filter: grayscale(0%);
+}
+
+/* Responsivo */
+@media (max-width: 1200px) {
+  .container {
+    padding: 60px 40px;
+  }
+ 
+  .project {
+    grid-template-columns: 80px 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 100px;
+  }
+ 
+  .number {
+    font-size: 100px;
+  }
+}
+
+@media (max-width: 900px) {
+  header {
+    padding: 20px 30px;
+  }
+ 
+  .container {
+    padding: 40px 30px;
+  }
+ 
+  .project,
+  .project.reverse {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    text-align: center;
+    margin-bottom: 80px;
+  }
+ 
+  .project.reverse .content,
+  .project.reverse .image,
+  .project.reverse .number {
+    order: unset;
+  }
+ 
+  .number {
+    font-size: 80px;
+    margin-bottom: 20px;
+  }
+ 
+  .title {
+    font-size: 28px;
+  }
+ 
+  .image img {
+    height: 280px;
+  }
+
+  /* Ajuste do espaçamento do menu em telas menores */
+  .menu:hover ~ .container,
+  header:has(.menu:hover) + .container {
+    margin-top: 160px;
+  }
+}
+
+@media (max-width: 600px) {
+  header {
+    padding: 15px 20px;
+  }
+ 
+  .Librali {
+    font-size: 24px;
+  }
+ 
+  .container {
+    padding: 30px 20px;
+  }
+ 
+  .number {
+    font-size: 60px;
+  }
+ 
+  .title {
+    font-size: 24px;
+  }
+ 
+  .description {
+    font-size: 15px;
+  }
+ 
+  .image img {
+    height: 240px;
+  }
+
+  /* Ajuste do espaçamento do menu em telas pequenas */
+  .menu:hover ~ .container,
+  header:has(.menu:hover) + .container {
+    margin-top: 140px;
+  }
+
+  .submenu {
+    min-width: 120px;
+  }
+
+  .submenu a {
+    font-size: 16px;
+    padding: 10px 12px;
+  }
+
+  .submenu a:hover {
+    font-size: 18px;
+    padding-left: 16px;
+  }
+}
