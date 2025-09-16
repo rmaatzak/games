@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jogo de Correspondência - Librali</title>
+    <style>
+      * {
+        padding: 0;
+        border: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      @font-face {
+        font-family: "Geist";
+        src: url("./fonts/Geist-Bold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Geist";
+        src: url("./fonts/Geist-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      body {
+        background: #f8fafc;
+        font-family: "Geist", Arial, sans-serif;
+        min-height: 100vh;
+        color: #334155;
+      }
+
+      /* Header */
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 40px;
+        background: white;
+        margin-top: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border-radius: 12px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      header > a {
+        font-size: 32px;
+        font-weight: bold;
+        color: #1e40af;
+        text-decoration: none;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      .menu {
+        position: relative;
+        display: inline-block;
+        margin-right: 50px;
+        text-decoration: none;
+      }
+
+      .menu > a {
+        color: #334155;
+        font-size: 20px;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+
+      .menu > a:hover {
+        color: #1e40af;
+      }
+
+      .Librali {
+        margin-left: 50px;
+        transition: all 0.4s ease;
+      }
+
+      .Librali:hover {
+        transform: scale(1.05);
+      }
+
+      .submenu {
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        flex-direction: column;
+        margin-top: 10px;
+        position: absolute;
+        left: 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s ease;
+        transform: translateY(-10px);
+        z-index: 100;
+        padding: 0 10px;
+        min-width: 150px;
+      }
+
+      .submenu a {
+        color: #334155;
+        text-decoration: none;
+        font-size: 16px;
+        margin: 8px 0;
+        display: block;
+        transition: all 0.3s ease;
+        padding: 8px 12px;
+        border-radius: 6px;
+      }
+
+      .menu:hover .submenu {
+        max-height: 500px;
+        opacity: 1;
+        transform: translateY(0);
+        padding: 10px;
+      }
+
+      .submenu > a:hover {
+        background-color: #f1f5f9;
+        color: #1e40af;
+        transform: translateX(4px);
+      }
+
+      /* Game Container */
+      .game-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 0 20px;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+      }
+
+      .game-title {
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 30px;
+        color: #1e293b;
+        position: relative;
+        padding-bottom: 15px;
+      }
+
+      .game-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+        border-radius: 2px;
+      }
+
+      .progress {
+        text-align: center;
+        font-size: 18px;
+        margin-bottom: 30px;
+        color: #64748b;
+        background: #f1f5f9;
+        padding: 12px 20px;
+        border-radius: 50px;
+        display: inline-block;
+        margin: 0 auto 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 500;
+      }
+
+      /* Matching Area */
+      .matching-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .signs-container,
+      .words-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .sign-item,
+      .word-item {
+        background-color: white;
+        border-radius: 12px;
+        padding: 15px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        border: 2px solid #f1f5f9;
+        min-height: 120px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .sign-item {
+        min-height: 180px;
+      }
+
+      .sign-item:hover,
+      .word-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        border-color: #e2e8f0;
+      }
+
+      .sign-item.selected,
+      .word-item.selected {
+        background-color: #dbeafe;
+        border-color: #3b82f6;
+      }
+
+      .sign-item.matched,
+      .word-item.matched {
+        background-color: #dcfce7;
+        border-color: #22c55e;
+        opacity: 0.7;
+        pointer-events: none;
+      }
+
+      .sign-video {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 10px;
+      }
+
+      .sign-name,
+      .word-text {
+        font-weight: 500;
+        font-size: 16px;
+      }
+
+      .connection-line {
+        stroke: #3b82f6;
+        stroke-width: 3;
+        display: none;
+      }
+
+      .connections {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      /* Controls */
+      .game-controls {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      .control-btn {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 14px 30px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin: 0 10px;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+
+      .control-btn:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+      }
+
+      .control-btn.secondary {
+        background: #f1f5f9;
+        color: #475569;
+      }
+
+      .control-btn.secondary:hover {
+        background: #e2e8f0;
+      }
+
+      /* Notification Modal */
+      .notification-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
+      .notification-modal {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.3s ease-out;
+      }
+
+      .notification-message {
+        font-size: 26px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .notification-message.correct {
+        color: #16a34a;
+      }
+
+      .notification-message.incorrect {
+        color: #dc2626;
+      }
+
+      .notification-details {
+        font-size: 18px;
+        color: #64748b;
+        margin-bottom: 30px;
+        line-height: 1.5;
+      }
+
+      .notification-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .notification-btn {
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 14px 30px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        flex: 1;
+        min-width: 160px;
+      }
+
+      .notification-btn:hover {
+        background-color: #2563eb;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+      }
+
+      .notification-btn.secondary {
+        background-color: #f1f5f9;
+        color: #475569;
+      }
+
+      .notification-btn.secondary:hover {
+        background-color: #e2e8f0;
+      }
+
+      .notification-btn.final {
+        background-color: #10b981;
+      }
+
+      .notification-btn.final:hover {
+        background-color: #059669;
+      }
+
+      /* Start Overlay */
+      .start-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        transition: opacity 0.5s ease;
+      }
+
+      .start-content {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        padding: 50px 60px;
+        border-radius: 24px;
+        text-align: center;
+        max-width: 560px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transform: translateY(0);
+        animation: startSlideIn 0.6s ease-out;
+      }
+
+      .start-content h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+        color: #1e293b;
+        font-weight: bold;
+      }
+
+      .start-content p {
+        font-size: 18px;
+        margin-bottom: 30px;
+        color: #64748b;
+        line-height: 1.6;
+        text-align: center;
+      }
+
+      #startButton {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 16px 45px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        letter-spacing: 0.5px;
+      }
+
+      #startButton:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+      }
+
+      /* Botão Voltar ao Início */
+      .back-to-home {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .home-btn {
+        display: inline-block;
+        background: #f1f5f9;
+        color: #475569;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 25px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .home-btn:hover {
+        background: #e2e8f0;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(-50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes startSlideIn {
+        from {
+          transform: translateY(-30px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .game-container.blurred {
+        filter: blur(5px);
+        pointer-events: none;
+      }
+
+      /* Responsividade */
+      @media (max-width: 768px) {
+        header {
+          padding: 15px 20px;
+          margin-top: 10px;
+        }
+
+        .Librali {
+          margin-left: 0;
+        }
+
+        .menu {
+          margin-right: 20px;
+        }
+
+        .signs-container,
+        .words-container {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .sign-item,
+        .word-item {
+          min-height: 140px;
+        }
+
+        .sign-video {
+          height: 100px;
+        }
+
+        .start-content {
+          padding: 30px;
+          margin: 20px;
+        }
+
+        .start-content h1 {
+          font-size: 28px;
+        }
+
+        .notification-modal {
+          padding: 30px 20px;
+        }
+
+        .notification-buttons {
+          flex-direction: column;
+        }
+
+        .control-btn {
+          margin: 5px;
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .signs-container,
+        .words-container {
+          grid-template-columns: 1fr;
+        }
+
+        .game-title {
+          font-size: 24px;
+        }
+
+        .progress {
+          font-size: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="jogosInicial.html" class="Librali">Librali</a>
+      <div class="menu">
+        <a href="#1">menu</a>
+        <div class="submenu">
+          <a href="index.html">Início</a>
+          <a href="#">Sobre Nós</a>
+          <a href="#">Cursos</a>
+          <a href="jogosInicial.html">Jogos</a>
+          <a href="#">Dicionário</a>
+          <a href="#">Entrar</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Start Overlay -->
+    <div id="startOverlay" class="start-overlay">
+      <div class="start-content">
+        <h1>Jogo de Correspondência em LIBRAS</h1>
+        <p>
+          Combine os sinais em LIBRAS com suas respectivas palavras em
+          português. Clique em um sinal e depois na palavra correspondente para
+          formar pares.
+        </p>
+        <button id="startButton">Iniciar Jogo</button>
+      </div>
+    </div>
+
+    <div class="game-container" id="gameContainer">
+      <h1 class="game-title">Jogo de Correspondência em LIBRAS</h1>
+
+      <div class="progress" id="progress">Pares: 0/5</div>
+
+      <div class="matching-container" id="matchingContainer">
+        <div class="signs-container" id="signsContainer">
+          <!-- Sinais serão inseridos aqui via JavaScript -->
+        </div>
+
+        <div class="words-container" id="wordsContainer">
+          <!-- Palavras serão inseridas aqui via JavaScript -->
+        </div>
+      </div>
+
+      <div class="game-controls">
+        <button class="control-btn" id="checkBtn">Verificar Respostas</button>
+        <button class="control-btn secondary" id="resetBtn">Reiniciar</button>
+      </div>
+
+      <div class="back-to-home">
+        <a href="jogosInicial.html" class="home-btn">Voltar aos Jogos</a>
+      </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div class="notification-overlay" id="notificationOverlay">
+      <div class="notification-modal">
+        <div class="notification-message" id="notificationMessage"></div>
+        <div class="notification-details" id="notificationDetails"></div>
+        <div class="notification-buttons" id="notificationButtons">
+          <button class="notification-btn" id="notificationBtn">
+            Jogar Novamente
+          </button>
+          <button class="notification-btn secondary" id="backToGamesBtn">
+            Voltar aos Jogos
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Elementos do DOM
+      const startOverlay = document.getElementById("startOverlay");
+      const startButton = document.getElementById("startButton");
+      const gameContainer = document.getElementById("gameContainer");
+      const progress = document.getElementById("progress");
+      const signsContainer = document.getElementById("signsContainer");
+      const wordsContainer = document.getElementById("wordsContainer");
+      const checkBtn = document.getElementById("checkBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const notificationOverlay = document.getElementById(
+        "notificationOverlay"
+      );
+      const notificationMessage = document.getElementById(
+        "notificationMessage"
+      );
+      const notificationDetails = document.getElementById(
+        "notificationDetails"
+      );
+      const notificationBtn = document.getElementById("notificationBtn");
+      const backToGamesBtn = document.getElementById("backToGamesBtn");
+
+      // Dados do jogo
+      const pairs = [
+        { sign: "Casa", word: "Casa", video: "videos/casa.mp4" },
+        { sign: "Amor", word: "Amor", video: "videos/amor.mp4" },
+        { sign: "Água", word: "Água", video: "videos/agua.mp4" },
+        { sign: "Livro", word: "Livro", video: "videos/livro.mp4" },
+        {
+          sign: "Computador",
+          word: "Computador",
+          video: "videos/computador.mp4",
+        },
+      ];
+
+      let selectedSign = null;
+      let selectedWord = null;
+      let matchedPairs = 0;
+      let attempts = 0;
+
+      // Inicializar o jogo
+      function initGame() {
+        // Embaralhar os pares
+        const shuffledPairs = [...pairs].sort(() => Math.random() - 0.5);
+        const shuffledWords = [...pairs]
+          .map((p) => p.word)
+          .sort(() => Math.random() - 0.5);
+
+        // Limpar containers
+        signsContainer.innerHTML = "";
+        wordsContainer.innerHTML = "";
+
+        // Adicionar sinais
+        shuffledPairs.forEach((pair, index) => {
+          const signElement = document.createElement("div");
+          signElement.className = "sign-item";
+          signElement.dataset.id = index;
+          signElement.dataset.sign = pair.sign;
+
+          if (pair.video) {
+            const video = document.createElement("video");
+            video.className = "sign-video";
+            video.src = pair.video;
+            video.controls = true;
+            video.loop = true;
+            video.muted = true;
+            video.autoplay = true;
+            signElement.appendChild(video);
+          }
+
+          const signName = document.createElement("div");
+          signName.className = "sign-name";
+          signName.textContent = "?";
+          signElement.appendChild(signName);
+
+          signElement.addEventListener("click", () =>
+            selectItem(signElement, "sign")
+          );
+          signsContainer.appendChild(signElement);
+        });
+
+        // Adicionar palavras
+        shuffledWords.forEach((word, index) => {
+          const wordElement = document.createElement("div");
+          wordElement.className = "word-item";
+          wordElement.dataset.id = index;
+          wordElement.dataset.word = word;
+          wordElement.textContent = word;
+
+          wordElement.addEventListener("click", () =>
+            selectItem(wordElement, "word")
+          );
+          wordsContainer.appendChild(wordElement);
+        });
+
+        // Reiniciar contadores
+        matchedPairs = 0;
+        attempts = 0;
+        updateProgress();
+      }
+
+      // Selecionar um item (sinal ou palavra)
+      function selectItem(item, type) {
+        // Se já está selecionado, desselecionar
+        if (item.classList.contains("selected")) {
+          item.classList.remove("selected");
+          if (type === "sign") selectedSign = null;
+          else selectedWord = null;
+          return;
+        }
+
+        // Desselecionar outros itens do mesmo tipo
+        if (type === "sign") {
+          document
+            .querySelectorAll(".sign-item.selected")
+            .forEach((el) => el.classList.remove("selected"));
+          selectedSign = item;
+          item.classList.add("selected");
+        } else {
+          document
+            .querySelectorAll(".word-item.selected")
+            .forEach((el) => el.classList.remove("selected"));
+          selectedWord = item;
+          item.classList.add("selected");
+        }
+
+        // Se ambos estão selecionados, verificar se formam um par
+        if (selectedSign && selectedWord) {
+          checkMatch();
+        }
+      }
+
+      // Verificar se o par selecionado está correto
+      function checkMatch() {
+        attempts++;
+        const signName = selectedSign.dataset.sign;
+        const wordText = selectedWord.dataset.word;
+
+        // Encontrar o par correspondente
+        const pair = pairs.find((p) => p.sign === signName);
+
+        if (pair && pair.word === wordText) {
+          // Par correto
+          selectedSign.classList.add("matched");
+          selectedWord.classList.add("matched");
+          selectedSign.classList.remove("selected");
+          selectedWord.classList.remove("selected");
+          matchedPairs++;
+          updateProgress();
+
+          // Verificar se o jogo terminou
+          if (matchedPairs === pairs.length) {
+            showResult();
+          }
+        } else {
+          // Par incorreto
+          setTimeout(() => {
+            selectedSign.classList.remove("selected");
+            selectedWord.classList.remove("selected");
+            selectedSign = null;
+            selectedWord = null;
+          }, 1000);
+        }
+      }
+
+      // Atualizar barra de progresso
+      function updateProgress() {
+        progress.textContent = `Pares: ${matchedPairs}/${pairs.length}`;
+      }
+
+      // Mostrar resultado final
+      function showResult() {
+        const accuracy = Math.round((matchedPairs / attempts) * 100);
+        notificationMessage.textContent = "Parabéns! Você completou o jogo!";
+        notificationDetails.innerHTML = `Você acertou <strong>${matchedPairs}</strong> de <strong>${pairs.length}</strong> pares<br>com <strong>${attempts}</strong> tentativas (${accuracy}% de precisão)`;
+        notificationOverlay.style.display = "flex";
+      }
+
+      // Reiniciar o jogo
+      function restartGame() {
+        initGame();
+        notificationOverlay.style.display = "none";
+      }
+
+      // Event Listeners
+      startButton.addEventListener("click", () => {
+        startOverlay.style.opacity = "0";
+        startOverlay.style.pointerEvents = "none";
+        gameContainer.classList.remove("blurred");
+        initGame();
+      });
+
+      checkBtn.addEventListener("click", () => {
+        // Verificar todas as correspondências
+        const allMatched = matchedPairs === pairs.length;
+
+        if (allMatched) {
+          showResult();
+        } else {
+          notificationMessage.textContent = "Continue tentando!";
+          notificationDetails.textContent = `Você completou ${matchedPairs} de ${pairs.length} pares.`;
+          notificationOverlay.style.display = "flex";
+
+          // Limpar botões e adicionar apenas o de continuar
+          notificationButtons.innerHTML = "";
+          const continueBtn = document.createElement("button");
+          continueBtn.className = "notification-btn";
+          continueBtn.textContent = "Continuar";
+          continueBtn.addEventListener("click", () => {
+            notificationOverlay.style.display = "none";
+          });
+          notificationButtons.appendChild(continueBtn);
+        }
+      });
+
+      resetBtn.addEventListener("click", initGame);
+
+      notificationBtn.addEventListener("click", restartGame);
+
+      backToGamesBtn.addEventListener("click", () => {
+        window.location.href = "jogosInicial.html";
+      });
+
+      // Inicializar ao carregar a página
+      initGame();
+    </script>
+  </body>
+</html>

@@ -1,225 +1,698 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Jogo da Memória - Emoji e Palavra</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #2c3e50;
-    color: #ecf0f1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0;
-    padding: 20px;
-  }
-  h1 {
-    margin-bottom: 10px;
-  }
-  #game {
-    display: grid;
-    grid-template-columns: repeat(4, 120px);
-    grid-gap: 15px;
-    margin-top: 20px;
-  }
-  .card {
-    width: 120px;
-    height: 120px;
-    background: #34495e;
-    border-radius: 8px;
-    cursor: pointer;
-    position: relative;
-    perspective: 600px;
-    user-select: none;
-  }
-  .card-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-    transition: transform 0.5s;
-    transform-style: preserve-3d;
-  }
-  .card.flipped .card-inner {
-    transform: rotateY(180deg);
-  }
-  .card-front, .card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-    backface-visibility: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 50px;
-    padding: 10px;
-    box-sizing: border-box;
-  }
-  .card-front {
-    background: #34495e;
-    color: #ecf0f1;
-    font-size: 50px;
-  }
-  .card-back {
-    background: #1abc9c;
-    color: #fff;
-    transform: rotateY(180deg);
-    font-size: 24px;
-    font-weight: bold;
-  }
-  #message {
-    margin-top: 20px;
-    font-size: 18px;
-  }
-  #resetBtn {
-    margin-top: 15px;
-    padding: 10px 20px;
-    font-size: 16px;
-    background: #e74c3c;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
-  }
-  #resetBtn:hover {
-    background: #c0392b;
-  }
-</style>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Jogo da Memória - LIBRAS</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-<h1>Jogo da Memória - Emoji e Palavra</h1>
-<div id="game"></div>
-<div id="message"></div>
-<button id="resetBtn">Reiniciar Jogo</button>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f8fafc;
+        color: #334155;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+      }
 
-<script>
-  // Lista de pares emoji e palavra
-  const pairs = [
-    { emoji: '🍎', word: 'Maçã' },
-    { emoji: '🍌', word: 'Banana' },
-    { emoji: '🍇', word: 'Uva' },
-    { emoji: '🍓', word: 'Morango' },
-    { emoji: '🍍', word: 'Abacaxi' },
-    { emoji: '🥝', word: 'Kiwi' },
-    { emoji: '🍉', word: 'Melancia' },
-    { emoji: '🍒', word: 'Cereja' }
-  ];
+      /* Start Overlay */
+      .start-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        transition: opacity 0.5s ease;
+      }
 
-  // Criar array com cartas: metade emoji, metade palavra
-  let cardsArray = [];
+      .start-content {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        padding: 50px 60px;
+        border-radius: 24px;
+        text-align: center;
+        max-width: 560px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transform: translateY(0);
+        animation: startSlideIn 0.6s ease-out;
+      }
 
-  pairs.forEach((pair, index) => {
-    cardsArray.push({ type: 'emoji', content: pair.emoji, pairId: index });
-    cardsArray.push({ type: 'word', content: pair.word, pairId: index });
-  });
+      .start-content h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+        color: #1e293b;
+        font-weight: bold;
+      }
 
-  let firstCard = null;
-  let secondCard = null;
-  let lockBoard = false;
-  let matches = 0;
+      .start-content p {
+        font-size: 18px;
+        margin-bottom: 30px;
+        color: #64748b;
+        line-height: 1.6;
+        text-align: center;
+      }
 
-  const game = document.getElementById('game');
-  const message = document.getElementById('message');
-  const resetBtn = document.getElementById('resetBtn');
+      #startButton {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 16px 45px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        letter-spacing: 0.5px;
+      }
 
-  function shuffle(array) {
-    for(let i = array.length -1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
+      #startButton:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+      }
 
-  function createBoard() {
-    game.innerHTML = '';
-    shuffle(cardsArray);
-    matches = 0;
-    message.textContent = '';
-    firstCard = null;
-    secondCard = null;
-    lockBoard = false;
+      @keyframes startSlideIn {
+        from {
+          transform: translateY(-30px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
 
-    cardsArray.forEach((cardData, index) => {
-      const card = document.createElement('div');
-      card.classList.add('card');
-      card.dataset.pairId = cardData.pairId;
-      card.dataset.type = cardData.type;
-      card.dataset.index = index;
+      .game-container.blurred {
+        filter: blur(5px);
+        pointer-events: none;
+      }
 
-      card.innerHTML = `
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+        width: 100%;
+        max-width: 800px;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+        color: #1e293b;
+        font-weight: bold;
+      }
+
+      .game-info {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 25px;
+        background: white;
+        padding: 15px 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .timer,
+      .moves {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #475569;
+      }
+
+      #game {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 15px;
+        margin: 20px 0;
+        max-width: 700px;
+        width: 100%;
+      }
+
+      .card {
+        aspect-ratio: 1;
+        background: white;
+        border-radius: 12px;
+        cursor: pointer;
+        position: relative;
+        perspective: 1000px;
+        user-select: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      .card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.5s;
+        transform-style: preserve-3d;
+      }
+
+      .card.flipped .card-inner {
+        transform: rotateY(180deg);
+      }
+
+      .card.matched {
+        opacity: 0.7;
+        cursor: default;
+      }
+
+      .card.matched:hover {
+        transform: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .card-front,
+      .card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        backface-visibility: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+
+      .card-front {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        font-size: 2.2rem;
+        font-weight: bold;
+      }
+
+      .card-back {
+        background: white;
+        color: #334155;
+        transform: rotateY(180deg);
+        font-weight: 600;
+        font-size: 1.3rem;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #e2e8f0;
+      }
+
+      .card-back.emoji {
+        font-size: 2.8rem;
+        background: white;
+        padding: 15px;
+      }
+
+      .card-back.word {
+        background: white;
+        padding: 15px;
+      }
+
+      #message {
+        margin: 20px 0;
+        font-size: 1.2rem;
+        text-align: center;
+        min-height: 40px;
+        font-weight: 500;
+        color: #475569;
+        background: white;
+        padding: 12px 20px;
+        border-radius: 50px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      button {
+        padding: 12px 25px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      #resetBtn {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      }
+
+      #resetBtn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
+      }
+
+      #backBtn {
+        background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+      }
+
+      #backBtn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(100, 116, 139, 0.3);
+      }
+
+      .result-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease;
+      }
+
+      .result-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .result-content {
+        background: white;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        transform: scale(0.9);
+        transition: transform 0.4s ease;
+      }
+
+      .result-overlay.active .result-content {
+        transform: scale(1);
+      }
+
+      .result-content h2 {
+        color: #1e293b;
+        margin-bottom: 20px;
+        font-size: 2rem;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .result-stats {
+        color: #475569;
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+        line-height: 1.6;
+        text-align: center;
+      }
+
+      .result-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .result-btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .result-play-again {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      }
+
+      .result-back {
+        background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+      }
+
+      .result-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 1.8rem;
+        }
+
+        #game {
+          grid-template-columns: repeat(3, 1fr);
+          grid-gap: 12px;
+        }
+
+        .card-front {
+          font-size: 1.8rem;
+        }
+
+        .card-back {
+          font-size: 1rem;
+        }
+
+        .card-back.emoji {
+          font-size: 2.2rem;
+        }
+
+        .buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        button {
+          width: 100%;
+          max-width: 250px;
+        }
+
+        .game-info {
+          flex-direction: column;
+          gap: 10px;
+          text-align: center;
+        }
+
+        .start-content {
+          padding: 30px;
+          margin: 20px;
+        }
+
+        .start-content h1 {
+          font-size: 28px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Start Overlay -->
+    <div id="startOverlay" class="start-overlay">
+      <div class="start-content">
+        <h1>Jogo da Memória em LIBRAS</h1>
+        <p>
+          Encontre os pares correspondentes entre gestos em LIBRAS e suas
+          palavras. Um jogo divertido para aprender e praticar a Língua
+          Brasileira de Sinais enquanto exercita sua memória!
+        </p>
+        <button id="startButton">Iniciar Jogo</button>
+      </div>
+    </div>
+
+    <div class="header">
+      <h1>Jogo da Memória - LIBRAS</h1>
+      <div class="game-info">
+        <div class="timer">Tempo: <span id="timer">00:00</span></div>
+        <div class="moves">Movimentos: <span id="moveCount">0</span></div>
+      </div>
+    </div>
+
+    <div id="game"></div>
+    <div id="message">Encontre os pares correspondentes!</div>
+    <div class="buttons">
+      <button id="resetBtn">Reiniciar Jogo</button>
+      <button id="backBtn">Voltar aos Jogos</button>
+    </div>
+
+    <div class="result-overlay" id="resultOverlay">
+      <div class="result-content">
+        <h2>Parabéns!</h2>
+        <div class="result-stats" id="resultStats">
+          Você completou o jogo em <span id="finalTime">00:00</span><br />
+          com <span id="finalMoves">0</span> movimentos
+        </div>
+        <div class="result-buttons">
+          <button class="result-btn result-play-again" id="resultPlayAgain">
+            Jogar Novamente
+          </button>
+          <button class="result-btn result-back" id="resultBack">
+            Voltar aos Jogos
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Lista de pares emoji (gestos) e palavra em LIBRAS
+      const pairs = [
+        { emoji: "👋", word: "Olá" },
+        { emoji: "🤟", word: "Eu te amo" },
+        { emoji: "👍", word: "Bom" },
+        { emoji: "👎", word: "Ruim" },
+        { emoji: "✋", word: "Pare" },
+        { emoji: "👏", word: "Aplaudir" },
+        { emoji: "🤲", word: "Obrigado" },
+        { emoji: "👌", word: "Ok" },
+      ];
+
+      // Variáveis do jogo
+      let cardsArray = [];
+      let firstCard = null;
+      let secondCard = null;
+      let lockBoard = false;
+      let matches = 0;
+      let moveCount = 0;
+      let timerInterval = null;
+      let seconds = 0;
+      let gameStarted = false;
+
+      // Elementos do DOM
+      const startOverlay = document.getElementById("startOverlay");
+      const startButton = document.getElementById("startButton");
+      const game = document.getElementById("game");
+      const message = document.getElementById("message");
+      const resetBtn = document.getElementById("resetBtn");
+      const backBtn = document.getElementById("backBtn");
+      const timerElement = document.getElementById("timer");
+      const moveCountElement = document.getElementById("moveCount");
+      const resultOverlay = document.getElementById("resultOverlay");
+      const finalTimeElement = document.getElementById("finalTime");
+      const finalMovesElement = document.getElementById("finalMoves");
+      const resultPlayAgain = document.getElementById("resultPlayAgain");
+      const resultBack = document.getElementById("resultBack");
+
+      // Evento para iniciar o jogo
+      startButton.addEventListener("click", () => {
+        startOverlay.style.opacity = "0";
+        startOverlay.style.pointerEvents = "none";
+        document.body.classList.remove("blurred");
+        initGame();
+      });
+
+      // Inicializar o jogo
+      function initGame() {
+        // Criar array with cards: half emoji, half word
+        cardsArray = [];
+
+        pairs.forEach((pair, index) => {
+          cardsArray.push({
+            type: "emoji",
+            content: pair.emoji,
+            pairId: index,
+          });
+          cardsArray.push({ type: "word", content: pair.word, pairId: index });
+        });
+
+        createBoard();
+      }
+
+      // Embaralhar array
+      function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+
+      // Criar o tabuleiro do jogo
+      function createBoard() {
+        game.innerHTML = "";
+        shuffle(cardsArray);
+        matches = 0;
+        moveCount = 0;
+        seconds = 0;
+        moveCountElement.textContent = moveCount;
+        timerElement.textContent = "00:00";
+        message.textContent = "Encontre os pares correspondentes!";
+        firstCard = null;
+        secondCard = null;
+        lockBoard = false;
+        gameStarted = false;
+
+        // Parar o timer se estiver rodando
+        if (timerInterval) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+
+        cardsArray.forEach((cardData, index) => {
+          const card = document.createElement("div");
+          card.classList.add("card");
+          card.dataset.pairId = cardData.pairId;
+          card.dataset.type = cardData.type;
+          card.dataset.index = index;
+
+          card.innerHTML = `
         <div class="card-inner">
           <div class="card-front">?</div>
-          <div class="card-back">${cardData.content}</div>
+          <div class="card-back ${cardData.type}">${cardData.content}</div>
         </div>
       `;
 
-      card.addEventListener('click', flipCard);
-      game.appendChild(card);
-    });
-  }
+          card.addEventListener("click", flipCard);
+          game.appendChild(card);
+        });
 
-  function flipCard() {
-    if(lockBoard) return;
-    if(this === firstCard) return;
-
-    this.classList.add('flipped');
-
-    if(!firstCard) {
-      firstCard = this;
-      return;
-    }
-
-    secondCard = this;
-    lockBoard = true;
-
-    checkForMatch();
-  }
-
-  function checkForMatch() {
-    // Par é válido se pairId igual e tipos diferentes (emoji + palavra)
-    const isMatch = 
-      firstCard.dataset.pairId === secondCard.dataset.pairId &&
-      firstCard.dataset.type !== secondCard.dataset.type;
-
-    if(isMatch) {
-      matches++;
-      message.textContent = `Par encontrado! Total de pares: ${matches}`;
-      disableCards();
-      if(matches === pairs.length) {
-        message.textContent = 'Parabéns! Você encontrou todos os pares!';
+        // Esconder overlay de resultado
+        resultOverlay.classList.remove("active");
       }
-    } else {
-      unflipCards();
-    }
-  }
 
-  function disableCards() {
-    firstCard.removeEventListener('click', flipCard);
-    secondCard.removeEventListener('click', flipCard);
-    resetBoard();
-  }
+      // Virar a carta
+      function flipCard() {
+        if (lockBoard) return;
+        if (this.classList.contains("matched")) return;
+        if (this === firstCard) return;
 
-  function unflipCards() {
-    setTimeout(() => {
-      firstCard.classList.remove('flipped');
-      secondCard.classList.remove('flipped');
-      resetBoard();
-    }, 1000);
-  }
+        // Iniciar o timer na primeira jogada
+        if (!gameStarted) {
+          startTimer();
+          gameStarted = true;
+        }
 
-  function resetBoard() {
-    [firstCard, secondCard] = [null, null];
-    lockBoard = false;
-  }
+        this.classList.add("flipped");
 
-  resetBtn.addEventListener('click', createBoard);
+        if (!firstCard) {
+          firstCard = this;
+          return;
+        }
 
-  createBoard();
-</script>
+        secondCard = this;
+        moveCount++;
+        moveCountElement.textContent = moveCount;
+        lockBoard = true;
 
-</body>
+        checkForMatch();
+      }
+
+      // Verificar se as cartas formam um par
+      function checkForMatch() {
+        // Par é válido se pairId igual e tipos diferentes (emoji + palavra)
+        const isMatch =
+          firstCard.dataset.pairId === secondCard.dataset.pairId &&
+          firstCard.dataset.type !== secondCard.dataset.type;
+
+        if (isMatch) {
+          matches++;
+          disableCards();
+          message.textContent = `Par encontrado! ${matches}/${pairs.length} pares`;
+
+          if (matches === pairs.length) {
+            endGame();
+          }
+        } else {
+          unflipCards();
+        }
+      }
+
+      // Desabilitar cartas correspondentes
+      function disableCards() {
+        firstCard.classList.add("matched");
+        secondCard.classList.add("matched");
+        firstCard.removeEventListener("click", flipCard);
+        secondCard.removeEventListener("click", flipCard);
+        resetBoard();
+      }
+
+      // Desvirar cartas que não formam par
+      function unflipCards() {
+        setTimeout(() => {
+          firstCard.classList.remove("flipped");
+          secondCard.classList.remove("flipped");
+          resetBoard();
+        }, 1000);
+      }
+
+      // Reiniciar o estado do tabuleiro
+      function resetBoard() {
+        [firstCard, secondCard] = [null, null];
+        lockBoard = false;
+      }
+
+      // Iniciar o timer
+      function startTimer() {
+        seconds = 0;
+        updateTimer();
+        timerInterval = setInterval(updateTimer, 1000);
+      }
+
+      // Atualizar o timer
+      function updateTimer() {
+        seconds++;
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        timerElement.textContent = `${minutes
+          .toString()
+          .padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
+      }
+
+      // Finalizar o jogo
+      function endGame() {
+        clearInterval(timerInterval);
+
+        // Atualizar estatísticas finais
+        finalTimeElement.textContent = timerElement.textContent;
+        finalMovesElement.textContent = moveCount;
+
+        // Mostrar overlay de resultado após um breve delay
+        setTimeout(() => {
+          resultOverlay.classList.add("active");
+        }, 1000);
+      }
+
+      // Event Listeners
+      resetBtn.addEventListener("click", createBoard);
+
+      backBtn.addEventListener("click", () => {
+        window.location.href = "jogosInicial.html";
+      });
+
+      resultPlayAgain.addEventListener("click", () => {
+        createBoard();
+      });
+
+      resultBack.addEventListener("click", () => {
+        window.location.href = "jogosInicial.html";
+      });
+
+      // Inicializar o jogo
+      initGame();
+    </script>
+  </body>
 </html>

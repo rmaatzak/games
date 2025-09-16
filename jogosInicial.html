@@ -1,91 +1,324 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Projetos Web</title>
-  <link rel="stylesheet" href="./css/jogosInicial.css" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Projetos Web</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f8fafc;
+        color: #334155;
+        line-height: 1.6;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 40px;
+        background: white;
+        margin: 20px auto;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border-radius: 12px;
+        max-width: 1200px;
+      }
+
+      .Librali {
+        font-size: 32px;
+        font-weight: bold;
+        color: #1e40af;
+        text-decoration: none;
+        transition: all 0.4s ease;
+      }
+
+      .Librali:hover {
+        transform: scale(1.05);
+      }
+
+      .menu {
+        position: relative;
+        display: inline-block;
+      }
+
+      .MenuOfc {
+        color: #334155;
+        font-size: 20px;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+
+      .MenuOfc:hover {
+        color: #1e40af;
+      }
+
+      .submenu {
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        flex-direction: column;
+        margin-top: 10px;
+        position: absolute;
+        right: 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s ease;
+        transform: translateY(-10px);
+        z-index: 100;
+        padding: 0 10px;
+        min-width: 150px;
+      }
+
+      .menu:hover .submenu {
+        max-height: 500px;
+        opacity: 1;
+        transform: translateY(0);
+        padding: 10px;
+      }
+
+      .submenu a {
+        color: #334155;
+        text-decoration: none;
+        font-size: 16px;
+        margin: 8px 0;
+        display: block;
+        transition: all 0.3s ease;
+        padding: 8px 12px;
+        border-radius: 6px;
+      }
+
+      .submenu a:hover {
+        background-color: #f1f5f9;
+        color: #1e40af;
+        transform: translateX(4px);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+
+      .project {
+        display: flex;
+        align-items: center;
+        margin-bottom: 80px;
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .project:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+      }
+
+      .project.reverse {
+        flex-direction: row-reverse;
+      }
+
+      .number {
+        font-size: 120px;
+        font-weight: bold;
+        color: #f1f5f9;
+        padding: 0 30px;
+        writing-mode: vertical-lr;
+        transform: rotate(180deg);
+        line-height: 1;
+      }
+
+      .content {
+        flex: 1;
+        padding: 40px;
+      }
+
+      .title {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: #1e293b;
+      }
+
+      .description {
+        font-size: 16px;
+        color: #64748b;
+        margin-bottom: 25px;
+        line-height: 1.6;
+      }
+
+      .link {
+        display: inline-block;
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+
+      .link:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+      }
+
+      .image {
+        flex: 1;
+        max-width: 500px;
+      }
+
+      .image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      @media (max-width: 900px) {
+        .project,
+        .project.reverse {
+          flex-direction: column;
+        }
+
+        .number {
+          writing-mode: horizontal-tb;
+          transform: none;
+          padding: 10px 0;
+          text-align: center;
+          font-size: 80px;
+        }
+
+        .image {
+          max-width: 100%;
+        }
+      }
+
+      @media (max-width: 600px) {
+        header {
+          padding: 15px 20px;
+          margin: 10px 20px;
+        }
+
+        .Librali {
+          font-size: 24px;
+        }
+
+        .container {
+          padding: 0 15px;
+        }
+
+        .content {
+          padding: 25px;
+        }
+
+        .title {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
     <header>
       <a href="" class="Librali">Librali</a>
       <div class="menu">
         <a href="#" class="MenuOfc">Menu</a>
         <div class="submenu">
-            <a href="">Ínicio</a>
-            <a href="">Sobre Nós</a>
-            <a href="">Cursos</a>
-            <a href="jogosInicial.html">Jogos</a>
-            <a href="">Dicionário</a>
-            <a href="">Entrar</a>
+          <a href="">Ínicio</a>
+          <a href="">Sobre Nós</a>
+          <a href="">Cursos</a>
+          <a href="jogosInicial.html">Jogos</a>
+          <a href="">Dicionário</a>
+          <a href="">Entrar</a>
         </div>
       </div>
     </header>
 
-  <div class="container">
-    <section class="project">
-      <div class="number">01.</div>
-      <div class="content">
-        <h2 class="title">Project Name</h2>
-        <p class="description">
-          Integer tristique est in sapien varius, a laoreet orci posuere. Aenean
-          imperdiet massa vitae augue pulvinar, consectetur faucibus enim
-          aliquam. Nullam fermentum blandit magna.
-        </p>
-        <a href="#" class="link">Ler mais</a>
-      </div>
-      <div class="image">
-        <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=600&q=80" alt="Projeto 01" />
-      </div>
-    </section>
+    <div class="container">
+      <section class="project">
+        <div class="number">01.</div>
+        <div class="content">
+          <h2 class="title">Jogo da Memória</h2>
+          <p class="description">
+            Teste sua memória e conhecimento de LIBRAS combinando sinais com
+            seus significados. Um jogo educativo que ajuda no aprendizado da
+            Língua Brasileira de Sinais de forma divertida.
+          </p>
+          <a href="memoria.html" class="link">Jogar agora</a>
+        </div>
+        <div class="image">
+          <img
+            src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=600&q=80"
+            alt="Jogo da Memória"
+          />
+        </div>
+      </section>
 
-    <section class="project reverse">
-      <div class="number">02.</div>
-      <div class="image">
-        <img src="image/charadas.png" alt="Charadas" />
-      </div>
-      <div class="content">
-        <h2 class="title">Charadas</h2>
-        <p class="description">
-          Integer tristique est in sapien varius, a laoreet orci posuere. Aenean
-          imperdiet massa vitae augue pulvinar, consectetur faucibus enim
-          aliquam. Nullam fermentum blandit magna.
-        </p>
-        <a href="./charadas.html" class="link">Jogar agora</a>
-      </div>
-    </section>
+      <section class="project reverse">
+        <div class="number">02.</div>
+        <div class="image">
+          <img
+            src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=600&q=80"
+            alt="Jogo de Correspondência"
+          />
+        </div>
+        <div class="content">
+          <h2 class="title">Jogo de Correspondência</h2>
+          <p class="description">
+            Combine imagens de sinais em LIBRAS com suas descrições corretas.
+            Perfeito para praticar e expandir seu vocabulário de forma
+            interativa.
+          </p>
+          <a href="jogoCorrespondencia.html" class="link">Jogar agora</a>
+        </div>
+      </section>
 
-    <section class="project">
-      <div class="number">03.</div>
-      <div class="content">
-        <h2 class="title">Project Name</h2>
-        <p class="description">
-          Integer tristique est in sapien varius, a laoreet orci posuere. Aenean
-          imperdiet massa vitae augue pulvinar, consectetur faucibus enim
-          aliquam. Nullam fermentum blandit magna.
-        </p>
-        <a href="#" class="link">Ler mais</a>
-      </div>
-      <div class="image">
-        <img src="https://images.unsplash.com/photo-1506617420156-8e4536971650?auto=format&fit=crop&w=600&q=80" alt="Projeto 03" />
-      </div>
-    </section>
+      <section class="project">
+        <div class="number">03.</div>
+        <div class="content">
+          <h2 class="title">Charadas em LIBRAS</h2>
+          <p class="description">
+            Teste seus conhecimentos da Língua Brasileira de Sinais! Escolha a
+            opção correta que corresponde ao sinal mostrado. Um jeito divertido
+            de aprender e praticar LIBRAS!
+          </p>
+          <a href="./charadas.html" class="link">Jogar agora</a>
+        </div>
+        <div class="image">
+          <img
+            src="https://images.unsplash.com/photo-1506617420156-8e4536971650?auto=format&fit=crop&w=600&q=80"
+            alt="Charadas em LIBRAS"
+          />
+        </div>
+      </section>
 
-    <section class="project reverse">
-      <div class="number">04.</div>
-      <div class="image">
-        <img src="https://images.unsplash.com/photo-1509228627152-e3b9d425b0e8?auto=format&fit=crop&w=600&q=80" alt="Projeto 04" />
-      </div>
-      <div class="content">
-        <h2 class="title">Project Name</h2>
-        <p class="description">
-          Integer tristique est in sapien varius, a laoreet orci posuere. Aenean
-          imperdiet massa vitae augue pulvinar, consectetur faucibus enim
-          aliquam. Nullam fermentum blandit magna.
-        </p>
-        <a href="#" class="link">Ler mais</a>
-      </div>
-    </section>
-  </div>
-</body>
+      <section class="project reverse">
+        <div class="number">04.</div>
+        <div class="image">
+          <img
+            src="https://images.unsplash.com/photo-1509228627152-e3b9d425b0e8?auto=format&fit=crop&w=600&q=80"
+            alt="Quiz de LIBRAS"
+          />
+        </div>
+        <div class="content">
+          <h2 class="title">Quiz de LIBRAS</h2>
+          <p class="description">
+            Desafie seus conhecimentos sobre a Língua Brasileira de Sinais com
+            nosso quiz interativo. Responda perguntas sobre gramática, cultura
+            surda e vocabulário.
+          </p>
+          <a href="quizLibras.html" class="link">Jogar agora</a>
+        </div>
+      </section>
+    </div>
+  </body>
 </html>

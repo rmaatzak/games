@@ -19,10 +19,18 @@
         font-style: normal;
       }
 
+      @font-face {
+        font-family: "Geist";
+        src: url("./fonts/Geist-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
       body {
-        background: white;
+        background: #f8fafc;
         font-family: "Geist", Arial, sans-serif;
         min-height: 100vh;
+        color: #334155;
       }
 
       /* Header */
@@ -33,25 +41,30 @@
         padding: 20px 40px;
         background: white;
         margin-top: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border-radius: 12px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
       }
 
-      
-.sign-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* preenche todo o quadrado */
-  border-radius: 12px;
-  display: block;
-}
+      .sign-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 12px;
+        display: block;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
 
       header > a {
         font-size: 32px;
         font-weight: bold;
-        color: black;
+        color: #1e40af;
         text-decoration: none;
       }
 
-      a{
+      a {
         text-decoration: none;
       }
 
@@ -63,19 +76,23 @@
       }
 
       .menu > a {
-        color: black;
+        color: #334155;
         font-size: 20px;
         cursor: pointer;
+        transition: color 0.3s ease;
       }
 
-       .Librali {
+      .menu > a:hover {
+        color: #1e40af;
+      }
+
+      .Librali {
         margin-left: 50px;
-         transition: all 0.4s ease;
-        transform: translateY(-10px);
+        transition: all 0.4s ease;
       }
 
-      .Librali:hover{
-         font-size: 33px;
+      .Librali:hover {
+        transform: scale(1.05);
       }
 
       .submenu {
@@ -86,28 +103,38 @@
         margin-top: 10px;
         position: absolute;
         left: 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         transition: all 0.4s ease;
         transform: translateY(-10px);
+        z-index: 100;
+        padding: 0 10px;
+        min-width: 150px;
       }
 
       .submenu a {
-        color: black;
+        color: #334155;
         text-decoration: none;
-        font-size: 20px;
-        margin: 4px 0;
-        transition: font-size 0.4s ease-in-out;
-        white-space: nowrap;
+        font-size: 16px;
+        margin: 8px 0;
+        display: block;
+        transition: all 0.3s ease;
+        padding: 8px 12px;
+        border-radius: 6px;
       }
 
-      /* agora funciona no menu e no submenu */
       .menu:hover .submenu {
-        max-height: 500px; /* altura suficiente */
+        max-height: 500px;
         opacity: 1;
         transform: translateY(0);
+        padding: 10px;
       }
 
       .submenu > a:hover {
-        font-size: 22px;
+        background-color: #f1f5f9;
+        color: #1e40af;
+        transform: translateX(4px);
       }
 
       /* Game Container */
@@ -121,17 +148,40 @@
 
       .game-title {
         text-align: center;
-        font-size: 24px;
+        font-size: 28px;
         font-weight: bold;
-        margin-bottom: 40px;
-        color: black;
+        margin-bottom: 30px;
+        color: #1e293b;
+        position: relative;
+        padding-bottom: 15px;
+      }
+
+      .game-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+        border-radius: 2px;
       }
 
       .progress {
         text-align: center;
         font-size: 18px;
         margin-bottom: 30px;
-        color: #666;
+        color: #64748b;
+        background: #f1f5f9;
+        padding: 12px 20px;
+        border-radius: 50px;
+        display: inline-block;
+        margin: 0 auto 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 500;
       }
 
       /* Sign Display Area */
@@ -142,17 +192,19 @@
       }
 
       .sign-image {
-        width: 300px;
-        height: 200px;
-        background-color: #e0e0e0;
-        border-radius: 12px;
+        width: 340px;
+        height: 240px;
+        background-color: white;
+        border-radius: 16px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 18px;
-        color: #666;
+        color: #64748b;
         text-align: center;
         padding: 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e2e8f0;
       }
 
       /* Options Grid */
@@ -160,39 +212,46 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 20px;
-        max-width: 600px;
+        max-width: 700px;
         margin: 0 auto 30px;
       }
 
       .option {
-        background-color: #e0e0e0;
+        background-color: white;
         border-radius: 12px;
-        padding: 20px;
+        padding: 22px;
         text-align: center;
         font-size: 18px;
         cursor: pointer;
         transition: all 0.3s ease;
-        color: black;
+        color: #334155;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        border: 2px solid #f1f5f9;
+        font-weight: 500;
       }
 
       .option:hover {
-        background-color: #d0d0d0;
-        transform: translateY(-2px);
+        background-color: #f8fafc;
+        transform: translateY(-4px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        border-color: #e2e8f0;
       }
 
       .option.correct {
-        background-color: #4caf50;
-        color: white;
+        background-color: #dcfce7;
+        color: #166534;
+        border-color: #bbf7d0;
       }
 
       .option.incorrect {
-        background-color: #f44336;
-        color: white;
+        background-color: #fee2e2;
+        color: #991b1b;
+        border-color: #fecaca;
       }
 
       .option.disabled {
         pointer-events: none;
-        opacity: 0.7;
+        opacity: 0.8;
       }
 
       /* Modal/Notification Overlay */
@@ -212,57 +271,77 @@
 
       .notification-modal {
         background: white;
-        border-radius: 16px;
+        border-radius: 20px;
         padding: 40px;
         max-width: 500px;
         width: 90%;
         text-align: center;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         animation: slideIn 0.3s ease-out;
       }
 
       .notification-message {
-        font-size: 24px;
+        font-size: 26px;
         font-weight: bold;
         margin-bottom: 20px;
       }
 
       .notification-message.correct {
-        color: #4caf50;
+        color: #16a34a;
       }
 
       .notification-message.incorrect {
-        color: #c93e35;
+        color: #dc2626;
       }
 
       .notification-details {
         font-size: 18px;
-        color: #666;
+        color: #64748b;
         margin-bottom: 30px;
+        line-height: 1.5;
+      }
+
+      .notification-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
       }
 
       .notification-btn {
-        background-color: #2196f3;
+        background-color: #3b82f6;
         color: white;
         border: none;
-        border-radius: 8px;
-        padding: 12px 30px;
+        border-radius: 10px;
+        padding: 14px 30px;
         font-size: 16px;
         font-weight: bold;
         cursor: pointer;
-        transition: background-color 0.3s;
+        transition: all 0.3s;
+        flex: 1;
+        min-width: 160px;
       }
 
       .notification-btn:hover {
-        background-color: #166dc4;
+        background-color: #2563eb;
+        transform: translateY(-2px);
+      }
+
+      .notification-btn.secondary {
+        background-color: #f1f5f9;
+        color: #475569;
+      }
+
+      .notification-btn.secondary:hover {
+        background-color: #e2e8f0;
       }
 
       .notification-btn.final {
-        background-color: #2196f3;
+        background-color: #10b981;
       }
 
       .notification-btn.final:hover {
-        background-color: #1976d2;
+        background-color: #059669;
       }
 
       /* Feedback and Controls - Hidden now */
@@ -305,32 +384,31 @@
       .start-content {
         background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
         padding: 50px 60px;
-        border-radius: 20px;
+        border-radius: 24px;
         text-align: center;
-        max-width: 500px;
-        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        max-width: 560px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.3);
         transform: translateY(0);
         animation: startSlideIn 0.6s ease-out;
       }
 
       .start-content h1 {
-        font-size: 32px;
+        font-size: 36px;
         margin-bottom: 20px;
-        color: #2c3e50;
+        color: #1e293b;
         font-weight: bold;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
 
       .start-content p {
         font-size: 18px;
         margin-bottom: 30px;
-        color: #6c757d;
+        color: #64748b;
         line-height: 1.6;
       }
 
       #startButton {
-        background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
         color: white;
         border: none;
         border-radius: 12px;
@@ -339,18 +417,18 @@
         font-weight: bold;
         cursor: pointer;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
         letter-spacing: 0.5px;
       }
 
       #startButton:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
       }
 
       #startButton:active {
         transform: translateY(0);
-        box-shadow: 0 3px 10px rgba(33, 150, 243, 0.3);
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
       }
 
       /* Animations */
@@ -390,6 +468,49 @@
         pointer-events: none;
       }
 
+      /* Responsividade */
+      @media (max-width: 768px) {
+        header {
+          padding: 15px 20px;
+          margin-top: 10px;
+        }
+
+        .Librali {
+          margin-left: 0;
+        }
+
+        .menu {
+          margin-right: 20px;
+        }
+
+        .options-container {
+          grid-template-columns: 1fr;
+          gap: 15px;
+        }
+
+        .sign-image {
+          width: 100%;
+          max-width: 300px;
+          height: 200px;
+        }
+
+        .start-content {
+          padding: 30px;
+          margin: 20px;
+        }
+
+        .start-content h1 {
+          font-size: 28px;
+        }
+
+        .notification-modal {
+          padding: 30px 20px;
+        }
+
+        .notification-buttons {
+          flex-direction: column;
+        }
+      }
     </style>
   </head>
   <body>
@@ -412,7 +533,11 @@
     <div id="startOverlay" class="start-overlay">
       <div class="start-content">
         <h1>Jogo de Charada em LIBRAS</h1>
-        <p>Teste seus conhecimentos da Língua Brasileira de Sinais! Escolha a opção correta que corresponde ao sinal mostrado. Um jeito divertido de aprender e praticar LIBRAS!</p>
+        <p>
+          Teste seus conhecimentos da Língua Brasileira de Sinais! Escolha a
+          opção correta que corresponde ao sinal mostrado. Um jeito divertido de
+          aprender e praticar LIBRAS!
+        </p>
         <button id="startButton">Iniciar Jogo</button>
       </div>
     </div>
@@ -441,235 +566,276 @@
       <div class="notification-modal">
         <div class="notification-message" id="notificationMessage"></div>
         <div class="notification-details" id="notificationDetails"></div>
-        <button class="notification-btn" id="notificationBtn">
-          Próxima Fase
-        </button>
+        <div class="notification-buttons" id="notificationButtons">
+          <button class="notification-btn" id="notificationBtn">
+            Próxima Fase
+          </button>
+        </div>
       </div>
     </div>
 
-   <script>
-  // Elementos do overlay inicial
-  const startOverlay = document.getElementById('startOverlay');
-  const startButton = document.getElementById('startButton');
-  const gameContainer = document.getElementById('gameContainer');
+    <script>
+      // Elementos do overlay inicial
+      const startOverlay = document.getElementById("startOverlay");
+      const startButton = document.getElementById("startButton");
+      const gameContainer = document.getElementById("gameContainer");
+      const notificationButtons = document.getElementById(
+        "notificationButtons"
+      );
 
-  // Array original de fases (não será modificado)
-  const originalPhases = [
-    {
-      question: "Casa",
-      options: ["Escola", "Casa", "Trabalho", "Parque"],
-      correctIndex: 1,
-      video: "videos/casa.mp4"
-    },
-    {
-      question: "Amor",
-      options: ["Amor", "Ódio", "Tristeza", "Alegria"],
-      correctIndex: 0,
-      video: "videos/amor.mp4"
-    },
-    {
-      question: "Água",
-      options: ["Fogo", "Terra", "Água", "Ar"],
-      correctIndex: 2,
-      video: "videos/agua.mp4"
-    },
-    {
-      question: "Livro",
-      options: ["Caneta", "Livro", "Caderno", "Lápis"],
-      correctIndex: 1,
-      video: "videos/livro.mp4"
-    },
-    {
-      question: "Computador",
-      options: ["Telefone", "Tablet", "Computador", "Televisão"],
-      correctIndex: 2,
-      video: "videos/computador.mp4"
-    },
-    {
-      question: "Cachorro",
-      options: ["Gato", "Cavalo", "Cachorro", "Pássaro"],
-      correctIndex: 2,
-      video: "videos/cachorro.mp4"
-    },
-    {
-      question: "Carro",
-      options: ["Bicicleta", "Carro", "Ônibus", "Moto"],
-      correctIndex: 1,
-      video: "videos/carro.mp4"
-    },
-    {
-      question: "Maçã",
-      options: ["Banana", "Laranja", "Uva", "Maçã"],
-      correctIndex: 3,
-      video: "videos/maca.mp4"
-    },
-    {
-      question: "Brasil",
-      options: ["Argentina", "Brasil", "Chile", "Uruguai"],
-      correctIndex: 1,
-      video: "videos/brasil.mp4"
-    },
-    {
-      question: "Sol",
-      options: ["Lua", "Estrela", "Planeta", "Sol"],
-      correctIndex: 3,
-      video: "videos/sol.mp4"
-    }
-  ];
+      // Array original de fases (não será modificado)
+      const originalPhases = [
+        {
+          question: "Casa",
+          options: ["Escola", "Casa", "Trabalho", "Parque"],
+          correctIndex: 1,
+          video: "videos/casa.mp4",
+        },
+        {
+          question: "Amor",
+          options: ["Amor", "Ódio", "Tristeza", "Alegria"],
+          correctIndex: 0,
+          video: "videos/amor.mp4",
+        },
+        {
+          question: "Água",
+          options: ["Fogo", "Terra", "Água", "Ar"],
+          correctIndex: 2,
+          video: "videos/agua.mp4",
+        },
+        {
+          question: "Livro",
+          options: ["Caneta", "Livro", "Caderno", "Lápis"],
+          correctIndex: 1,
+          video: "videos/livro.mp4",
+        },
+        {
+          question: "Computador",
+          options: ["Telefone", "Tablet", "Computador", "Televisão"],
+          correctIndex: 2,
+          video: "videos/computador.mp4",
+        },
+        {
+          question: "Cachorro",
+          options: ["Gato", "Cavalo", "Cachorro", "Pássaro"],
+          correctIndex: 2,
+          video: "videos/cachorro.mp4",
+        },
+        {
+          question: "Carro",
+          options: ["Bicicleta", "Carro", "Ônibus", "Moto"],
+          correctIndex: 1,
+          video: "videos/carro.mp4",
+        },
+        {
+          question: "Maçã",
+          options: ["Banana", "Laranja", "Uva", "Maçã"],
+          correctIndex: 3,
+          video: "videos/maca.mp4",
+        },
+        {
+          question: "Brasil",
+          options: ["Argentina", "Brasil", "Chile", "Uruguai"],
+          correctIndex: 1,
+          video: "videos/brasil.mp4",
+        },
+        {
+          question: "Sol",
+          options: ["Lua", "Estrela", "Planeta", "Sol"],
+          correctIndex: 3,
+          video: "videos/sol.mp4",
+        },
+      ];
 
-  // Array embaralhado que será usado no jogo
-  let shuffledPhases = [];
-  let currentPhase = 0;
-  let score = 0;
+      // Array embaralhado que será usado no jogo
+      let shuffledPhases = [];
+      let currentPhase = 0;
+      let score = 0;
 
-  const signImage = document.getElementById('signImage');
-  const optionsContainer = document.getElementById('optionsContainer');
-  const notificationOverlay = document.getElementById('notificationOverlay');
-  const notificationMessage = document.getElementById('notificationMessage');
-  const notificationDetails = document.getElementById('notificationDetails');
-  const notificationBtn = document.getElementById('notificationBtn');
-  const progress = document.getElementById('progress');
+      const signImage = document.getElementById("signImage");
+      const optionsContainer = document.getElementById("optionsContainer");
+      const notificationOverlay = document.getElementById(
+        "notificationOverlay"
+      );
+      const notificationMessage = document.getElementById(
+        "notificationMessage"
+      );
+      const notificationDetails = document.getElementById(
+        "notificationDetails"
+      );
+      const notificationBtn = document.getElementById("notificationBtn");
+      const progress = document.getElementById("progress");
 
-  // Função para embaralhar um array (algoritmo Fisher-Yates)
-  function shuffleArray(array) {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  }
+      // Função para embaralhar um array (algoritmo Fisher-Yates)
+      function shuffleArray(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+      }
 
-  // Função para embaralhar as fases
-  function shufflePhases() {
-    shuffledPhases = shuffleArray(originalPhases);
-    console.log('Questões embaralhadas!');
-  }
+      // Função para embaralhar as fases
+      function shufflePhases() {
+        shuffledPhases = shuffleArray(originalPhases);
+        console.log("Questões embaralhadas!");
+      }
 
-  // Evento para iniciar o jogo
-  startButton.addEventListener('click', () => {
-    shufflePhases();
-    startOverlay.style.opacity = '0';
-    startOverlay.style.pointerEvents = 'none';
-    gameContainer.classList.remove('blurred');
-    setTimeout(initGame, 300);
-  });
+      // Evento para iniciar o jogo
+      startButton.addEventListener("click", () => {
+        shufflePhases();
+        startOverlay.style.opacity = "0";
+        startOverlay.style.pointerEvents = "none";
+        gameContainer.classList.remove("blurred");
+        setTimeout(initGame, 300);
+      });
 
-  // Inicializa o jogo
-  function initGame() {
-    const currentQuestionData = shuffledPhases[currentPhase];
-    progress.textContent = `Fase ${currentPhase + 1} de ${shuffledPhases.length}`;
-    signImage.innerHTML = '';
+      // Inicializa o jogo
+      function initGame() {
+        const currentQuestionData = shuffledPhases[currentPhase];
+        progress.textContent = `Fase ${currentPhase + 1} de ${
+          shuffledPhases.length
+        }`;
+        signImage.innerHTML = "";
 
-    if (currentQuestionData.video) {
-      const videoElement = document.createElement('video');
-      videoElement.src = currentQuestionData.video;
-      videoElement.className = 'sign-video';
-      videoElement.controls = true;
-      videoElement.loop = true;
-      videoElement.muted = true;
-      videoElement.autoplay = true;
-      signImage.appendChild(videoElement);
-    } else {
-      const textElement = document.createElement('div');
-      textElement.className = 'sign-text';
-      textElement.textContent = `Sinal para: ${currentQuestionData.question}`;
-      signImage.appendChild(textElement);
-    }
+        if (currentQuestionData.video) {
+          const videoElement = document.createElement("video");
+          videoElement.src = currentQuestionData.video;
+          videoElement.className = "sign-video";
+          videoElement.controls = true;
+          videoElement.loop = true;
+          videoElement.muted = true;
+          videoElement.autoplay = true;
+          signImage.appendChild(videoElement);
+        } else {
+          const textElement = document.createElement("div");
+          textElement.className = "sign-text";
+          textElement.textContent = `Sinal para: ${currentQuestionData.question}`;
+          signImage.appendChild(textElement);
+        }
 
-    optionsContainer.innerHTML = '';
-    currentQuestionData.options.forEach((option, index) => {
-      const optionElement = document.createElement('div');
-      optionElement.className = 'option';
-      optionElement.textContent = option;
-      optionElement.addEventListener('click', () => checkAnswer(index));
-      optionsContainer.appendChild(optionElement);
-    });
+        optionsContainer.innerHTML = "";
+        currentQuestionData.options.forEach((option, index) => {
+          const optionElement = document.createElement("div");
+          optionElement.className = "option";
+          optionElement.textContent = option;
+          optionElement.addEventListener("click", () => checkAnswer(index));
+          optionsContainer.appendChild(optionElement);
+        });
 
-    hideNotification();
-  }
+        hideNotification();
+      }
 
-  function showNotification(isCorrect, message, details = '') {
-    notificationMessage.textContent = message;
-    notificationMessage.className = `notification-message ${isCorrect ? 'correct' : 'incorrect'}`;
-    notificationDetails.textContent = details;
+      function showNotification(isCorrect, message, details = "") {
+        notificationMessage.textContent = message;
+        notificationMessage.className = `notification-message ${
+          isCorrect ? "correct" : "incorrect"
+        }`;
+        notificationDetails.textContent = details;
 
-    if (currentPhase < shuffledPhases.length - 1) {
-      notificationBtn.textContent = 'Próxima Fase';
-      notificationBtn.className = 'notification-btn';
-    } else {
-      notificationBtn.textContent = 'Ver Resultado Final';
-      notificationBtn.className = 'notification-btn final';
-    }
-    notificationOverlay.style.display = 'flex';
-  }
+        // Limpa os botões anteriores
+        notificationButtons.innerHTML = "";
 
-  function hideNotification() {
-    notificationOverlay.style.display = 'none';
-  }
+        if (currentPhase < shuffledPhases.length - 1) {
+          const nextBtn = document.createElement("button");
+          nextBtn.textContent = "Próxima Fase";
+          nextBtn.className = "notification-btn";
+          nextBtn.addEventListener("click", () => {
+            currentPhase++;
+            initGame();
+            hideNotification();
+          });
+          notificationButtons.appendChild(nextBtn);
+        } else {
+          showFinalScore();
+        }
 
-  function checkAnswer(selectedIndex) {
-    const correctIndex = shuffledPhases[currentPhase].correctIndex;
-    const options = document.querySelectorAll('.option');
-    options.forEach((option, index) => {
-      option.classList.add('disabled');
-      if (index === correctIndex) option.classList.add('correct');
-      else if (index === selectedIndex) option.classList.add('incorrect');
-    });
+        notificationOverlay.style.display = "flex";
+      }
 
-    if (selectedIndex === correctIndex) {
-      score++;
-      showNotification(true, 'Correto! Parabéns!');
-    } else {
-      showNotification(false, 'Ops! Resposta incorreta',
-        `A resposta correta é: ${shuffledPhases[currentPhase].options[correctIndex]}`);
-    }
-  }
+      function hideNotification() {
+        notificationOverlay.style.display = "none";
+      }
 
-  function showFinalScore() {
-    const percentage = Math.round((score / shuffledPhases.length) * 100);
-    let emoji = '', message = '';
-    if (percentage === 100) { emoji = '🏆'; message = 'Perfeito!'; }
-    else if (percentage >= 80) { emoji = '🎉'; message = 'Muito bem!'; }
-    else if (percentage >= 60) { emoji = '👍'; message = 'Bom trabalho!'; }
-    else { emoji = '💪'; message = 'Continue praticando!'; }
+      function checkAnswer(selectedIndex) {
+        const correctIndex = shuffledPhases[currentPhase].correctIndex;
+        const options = document.querySelectorAll(".option");
+        options.forEach((option, index) => {
+          option.classList.add("disabled");
+          if (index === correctIndex) option.classList.add("correct");
+          else if (index === selectedIndex) option.classList.add("incorrect");
+        });
 
-    notificationMessage.innerHTML = `${message} ${emoji}`;
-    notificationMessage.className = 'notification-message correct';
-    notificationDetails.innerHTML = `Você acertou <strong>${score}</strong> de <strong>${shuffledPhases.length}</strong> questões<br>(${percentage}% de acerto)`;
-    notificationBtn.textContent = 'Jogar Novamente';
-    notificationBtn.className = 'notification-btn final';
-    notificationOverlay.style.display = 'flex';
-  }
+        if (selectedIndex === correctIndex) {
+          score++;
+          showNotification(true, "Correto! Parabéns!");
+        } else {
+          showNotification(
+            false,
+            "Ops! Resposta incorreta",
+            `A resposta correta é: ${shuffledPhases[currentPhase].options[correctIndex]}`
+          );
+        }
+      }
 
-  function restartGame() {
-    currentPhase = 0;
-    score = 0;
-    shufflePhases();
-    startOverlay.style.opacity = '1';
-    startOverlay.style.pointerEvents = 'auto';
-    gameContainer.classList.add('blurred');
-  }
+      function showFinalScore() {
+        const percentage = Math.round((score / shuffledPhases.length) * 100);
+        let emoji = "",
+          message = "";
+        if (percentage === 100) {
+          emoji = "🏆";
+          message = "Perfeito!";
+        } else if (percentage >= 80) {
+          emoji = "🎉";
+          message = "Muito bem!";
+        } else if (percentage >= 60) {
+          emoji = "👍";
+          message = "Bom trabalho!";
+        } else {
+          emoji = "💪";
+          message = "Continue praticando!";
+        }
 
-  notificationBtn.addEventListener('click', () => {
-    if (currentPhase < shuffledPhases.length - 1) {
-      currentPhase++;
-      initGame();
-    } else if (notificationBtn.textContent === 'Ver Resultado Final') {
-      showFinalScore();
-    } else {
-      restartGame();
-    }
-  });
+        notificationMessage.innerHTML = `${message} ${emoji}`;
+        notificationMessage.className = "notification-message correct";
+        notificationDetails.innerHTML = `Você acertou <strong>${score}</strong> de <strong>${shuffledPhases.length}</strong> questões<br>(${percentage}% de acerto)`;
 
-  notificationOverlay.addEventListener('click', (e) => {
-    if (e.target === notificationOverlay) {
-      // bloqueado fechar clicando fora
-    }
-  });
+        // Limpa os botões anteriores e adiciona os novos
+        notificationButtons.innerHTML = "";
 
-  shufflePhases();
-</script>
+        const playAgainBtn = document.createElement("button");
+        playAgainBtn.textContent = "Jogar Novamente";
+        playAgainBtn.className = "notification-btn final";
+        playAgainBtn.addEventListener("click", restartGame);
+        notificationButtons.appendChild(playAgainBtn);
 
+        const backToGamesBtn = document.createElement("button");
+        backToGamesBtn.textContent = "Voltar aos Jogos";
+        backToGamesBtn.className = "notification-btn secondary";
+        backToGamesBtn.addEventListener("click", () => {
+          window.location.href = "jogosInicial.html";
+        });
+        notificationButtons.appendChild(backToGamesBtn);
+
+        notificationOverlay.style.display = "flex";
+      }
+
+      function restartGame() {
+        currentPhase = 0;
+        score = 0;
+        shufflePhases();
+        initGame();
+        hideNotification();
+      }
+
+      notificationOverlay.addEventListener("click", (e) => {
+        if (e.target === notificationOverlay) {
+          // bloqueado fechar clicando fora
+        }
+      });
+
+      shufflePhases();
+    </script>
   </body>
 </html>

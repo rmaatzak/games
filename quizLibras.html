@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz de LIBRAS - Librali</title>
+    <style>
+      * {
+        padding: 0;
+        border: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+
+      @font-face {
+        font-family: "Geist";
+        src: url("./fonts/Geist-Bold.ttf") format("truetype");
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "Geist";
+        src: url("./fonts/Geist-Regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      body {
+        background: #f8fafc;
+        font-family: "Geist", Arial, sans-serif;
+        min-height: 100vh;
+        color: #334155;
+      }
+
+      /* Header */
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 40px;
+        background: white;
+        margin-top: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border-radius: 12px;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      header > a {
+        font-size: 32px;
+        font-weight: bold;
+        color: #1e40af;
+        text-decoration: none;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      .menu {
+        position: relative;
+        display: inline-block;
+        margin-right: 50px;
+        text-decoration: none;
+      }
+
+      .menu > a {
+        color: #334155;
+        font-size: 20px;
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+
+      .menu > a:hover {
+        color: #1e40af;
+      }
+
+      .Librali {
+        margin-left: 50px;
+        transition: all 0.4s ease;
+      }
+
+      .Librali:hover {
+        transform: scale(1.05);
+      }
+
+      .submenu {
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        flex-direction: column;
+        margin-top: 10px;
+        position: absolute;
+        left: 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s ease;
+        transform: translateY(-10px);
+        z-index: 100;
+        padding: 0 10px;
+        min-width: 150px;
+      }
+
+      .submenu a {
+        color: #334155;
+        text-decoration: none;
+        font-size: 16px;
+        margin: 8px 0;
+        display: block;
+        transition: all 0.3s ease;
+        padding: 8px 12px;
+        border-radius: 6px;
+      }
+
+      .menu:hover .submenu {
+        max-height: 500px;
+        opacity: 1;
+        transform: translateY(0);
+        padding: 10px;
+      }
+
+      .submenu > a:hover {
+        background-color: #f1f5f9;
+        color: #1e40af;
+        transform: translateX(4px);
+      }
+
+      /* Game Container */
+      .game-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+        opacity: 1;
+        transition: opacity 0.5s ease;
+      }
+
+      .game-title {
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 30px;
+        color: #1e293b;
+        position: relative;
+        padding-bottom: 15px;
+      }
+
+      .game-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 4px;
+        background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+        border-radius: 2px;
+      }
+
+      .progress {
+        text-align: center;
+        font-size: 18px;
+        margin-bottom: 30px;
+        color: #64748b;
+        background: #f1f5f9;
+        padding: 12px 20px;
+        border-radius: 50px;
+        display: inline-block;
+        margin: 0 auto 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 500;
+      }
+
+      /* Question Area */
+      .question-container {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e2e8f0;
+      }
+
+      .question-text {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        color: #1e293b;
+        line-height: 1.5;
+      }
+
+      .question-media {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 25px;
+      }
+
+      .question-image,
+      .question-video {
+        max-width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .question-video {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+      }
+
+      /* Options */
+      .options-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin-bottom: 30px;
+      }
+
+      .option {
+        background-color: white;
+        border-radius: 12px;
+        padding: 18px 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: #334155;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        border: 2px solid #f1f5f9;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+      }
+
+      .option:hover {
+        background-color: #f8fafc;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        border-color: #e2e8f0;
+      }
+
+      .option.correct {
+        background-color: #dcfce7;
+        color: #166534;
+        border-color: #bbf7d0;
+      }
+
+      .option.incorrect {
+        background-color: #fee2e2;
+        color: #991b1b;
+        border-color: #fecaca;
+      }
+
+      .option.disabled {
+        pointer-events: none;
+        opacity: 0.8;
+      }
+
+      .option-prefix {
+        font-weight: bold;
+        margin-right: 15px;
+        min-width: 24px;
+        text-align: center;
+      }
+
+      /* Controls */
+      .game-controls {
+        text-align: center;
+        margin-top: 30px;
+      }
+
+      .control-btn {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 14px 30px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin: 0 10px;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+      }
+
+      .control-btn:hover {
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+      }
+
+      .control-btn:disabled {
+        background: #cbd5e1;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      .control-btn.secondary {
+        background: #f1f5f9;
+        color: #475569;
+      }
+
+      .control-btn.secondary:hover {
+        background: #e2e8f0;
+      }
+
+      /* Notification Modal */
+      .notification-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease-in-out;
+      }
+
+      .notification-modal {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.3s ease-out;
+      }
+
+      .notification-message {
+        font-size: 26px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .notification-message.correct {
+        color: #16a34a;
+      }
+
+      .notification-message.incorrect {
+        color: #dc2626;
+      }
+
+      .notification-details {
+        font-size: 18px;
+        color: #64748b;
+        margin-bottom: 30px;
+        line-height: 1.5;
+      }
+
+      .notification-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .notification-btn {
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 14px 30px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        flex: 1;
+        min-width: 160px;
+      }
+
+      .notification-btn:hover {
+        background-color: #2563eb;
+        transform: translateY(-2px);
+      }
+
+      .notification-btn.secondary {
+        background-color: #f1f5f9;
+        color: #475569;
+      }
+
+      .notification-btn.secondary:hover {
+        background-color: #e2e8f0;
+      }
+
+      .notification-btn.final {
+        background-color: #10b981;
+      }
+
+      .notification-btn.final:hover {
+        background-color: #059669;
+      }
+
+      /* Start Overlay */
+      .start-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        transition: opacity 0.5s ease;
+      }
+
+      .start-content {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        padding: 50px 60px;
+        border-radius: 24px;
+        text-align: center;
+        max-width: 560px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        transform: translateY(0);
+        animation: startSlideIn 0.6s ease-out;
+      }
+
+      .start-content h1 {
+        font-size: 36px;
+        margin-bottom: 20px;
+        color: #1e293b;
+        font-weight: bold;
+      }
+
+      .start-content p {
+        font-size: 18px;
+        margin-bottom: 30px;
+        color: #64748b;
+        line-height: 1.6;
+      }
+
+      #startButton {
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 16px 45px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        letter-spacing: 0.5px;
+      }
+
+      #startButton:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(-50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes startSlideIn {
+        from {
+          transform: translateY(-30px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .game-container.blurred {
+        filter: blur(5px);
+        pointer-events: none;
+      }
+
+      /* Responsividade */
+      @media (max-width: 768px) {
+        header {
+          padding: 15px 20px;
+          margin-top: 10px;
+        }
+
+        .Librali {
+          margin-left: 0;
+        }
+
+        .menu {
+          margin-right: 20px;
+        }
+
+        .question-container {
+          padding: 20px;
+        }
+
+        .question-text {
+          font-size: 18px;
+        }
+
+        .option {
+          padding: 15px 20px;
+        }
+
+        .start-content {
+          padding: 30px;
+          margin: 20px;
+        }
+
+        .start-content h1 {
+          font-size: 28px;
+        }
+
+        .notification-modal {
+          padding: 30px 20px;
+        }
+
+        .notification-buttons {
+          flex-direction: column;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .game-title {
+          font-size: 24px;
+        }
+
+        .progress {
+          font-size: 16px;
+        }
+
+        .control-btn {
+          padding: 12px 20px;
+          margin: 5px;
+          width: 100%;
+        }
+
+        .game-controls {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="jogosInicial.html" class="Librali">Librali</a>
+      <div class="menu">
+        <a href="#1">menu</a>
+        <div class="submenu">
+          <a href="index.html">Início</a>
+          <a href="#">Sobre Nós</a>
+          <a href="#">Cursos</a>
+          <a href="jogos.html">Jogos</a>
+          <a href="#">Dicionário</a>
+          <a href="#">Entrar</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Start Overlay -->
+    <div id="startOverlay" class="start-overlay">
+      <div class="start-content">
+        <h1>Quiz de LIBRAS</h1>
+        <p>
+          Teste seus conhecimentos em LIBRAS! Responda às perguntas sobre sinais
+          e a cultura surda. Cada pergunta vale pontos - quanto mais rápido
+          responder, mais pontos ganha!
+        </p>
+        <button id="startButton">Iniciar Quiz</button>
+      </div>
+    </div>
+
+    <div class="game-container" id="gameContainer">
+      <h1 class="game-title">Quiz de LIBRAS</h1>
+
+      <div class="progress" id="progress">Pergunta: 1/5</div>
+
+      <div class="question-container" id="questionContainer">
+        <div class="question-text" id="questionText">
+          <!-- A pergunta será inserida aqui via JavaScript -->
+        </div>
+
+        <div class="question-media" id="questionMedia">
+          <!-- Mídia (imagem ou vídeo) será inserida aqui via JavaScript -->
+        </div>
+
+        <div class="options-container" id="optionsContainer">
+          <!-- As opções serão inseridas aqui via JavaScript -->
+        </div>
+      </div>
+
+      <div class="game-controls">
+        <button class="control-btn" id="nextBtn" disabled>
+          Próxima Pergunta
+        </button>
+        <button class="control-btn secondary" id="resetBtn">
+          Reiniciar Quiz
+        </button>
+      </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div class="notification-overlay" id="notificationOverlay">
+      <div class="notification-modal">
+        <div class="notification-message" id="notificationMessage"></div>
+        <div class="notification-details" id="notificationDetails"></div>
+        <div class="notification-buttons" id="notificationButtons">
+          <button class="notification-btn" id="notificationBtn">
+            Jogar Novamente
+          </button>
+          <button class="notification-btn secondary" id="backToGamesBtn">
+            Voltar aos Jogos
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Elementos do DOM
+      const startOverlay = document.getElementById("startOverlay");
+      const startButton = document.getElementById("startButton");
+      const gameContainer = document.getElementById("gameContainer");
+      const progress = document.getElementById("progress");
+      const questionText = document.getElementById("questionText");
+      const questionMedia = document.getElementById("questionMedia");
+      const optionsContainer = document.getElementById("optionsContainer");
+      const nextBtn = document.getElementById("nextBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const notificationOverlay = document.getElementById(
+        "notificationOverlay"
+      );
+      const notificationMessage = document.getElementById(
+        "notificationMessage"
+      );
+      const notificationDetails = document.getElementById(
+        "notificationDetails"
+      );
+      const notificationBtn = document.getElementById("notificationBtn");
+      const backToGamesBtn = document.getElementById("backToGamesBtn");
+
+      // Dados do quiz
+      const questions = [
+        {
+          question: "Qual é o sinal para 'Obrigado' em LIBRAS?",
+          media: {
+            type: "video",
+            src: "videos/obrigado.mp4",
+          },
+          options: [
+            { text: "Mão plana tocando a testa", correct: false },
+            {
+              text: "Mão fechada com o polegar estendido tocando o queixo",
+              correct: false,
+            },
+            {
+              text: "Mão plana tocando o queixo e movendo para frente",
+              correct: true,
+            },
+            { text: "Mão fechada batendo no peito", correct: false },
+          ],
+        },
+        {
+          question: "O que significa este sinal?",
+          media: {
+            type: "image",
+            src: "images/sinal-amor.jpg",
+          },
+          options: [
+            { text: "Amizade", correct: false },
+            { text: "Amor", correct: true },
+            { text: "Família", correct: false },
+            { text: "Respeito", correct: false },
+          ],
+        },
+        {
+          question: "Qual é o sinal correto para 'Bom dia'?",
+          media: {
+            type: "video",
+            src: "videos/bom-dia.mp4",
+          },
+          options: [
+            {
+              text: "Mão plana tocando a testa e depois se abrindo",
+              correct: false,
+            },
+            {
+              text: "Mão fechada batendo no queixo duas vezes",
+              correct: false,
+            },
+            {
+              text: "Mão plana tocando a testa e depois descendo até a altura do peito",
+              correct: true,
+            },
+            {
+              text: "Mão fechada com polegar para cima movendo para frente",
+              correct: false,
+            },
+          ],
+        },
+        {
+          question: "Como se faz o sinal para 'Família' em LIBRAS?",
+          media: {
+            type: "image",
+            src: "images/sinal-familia.jpg",
+          },
+          options: [
+            { text: "Duas mãos em F tocando o peito", correct: true },
+            {
+              text: "Uma mão plana sobre a outra no centro do peito",
+              correct: false,
+            },
+            { text: "Dedos indicadores formando um círculo", correct: false },
+            { text: "Mãos abertas se cruzando no peito", correct: false },
+          ],
+        },
+        {
+          question: "Qual destes sinais representa 'Comunidade Surda'?",
+          media: {
+            type: "video",
+            src: "videos/comunidade-surda.mp4",
+          },
+          options: [
+            { text: "Mão em C fazendo movimento circular", correct: false },
+            {
+              text: "Dedos indicador e médio tocando a orelha e depois os lábios",
+              correct: false,
+            },
+            {
+              text: "Mão plana tocando a testa e depois se movendo para formar um círculo",
+              correct: true,
+            },
+            {
+              text: "Duas mãos se encontrando no centro do peito",
+              correct: false,
+            },
+          ],
+        },
+      ];
+
+      let currentQuestion = 0;
+      let score = 0;
+      let answered = false;
+
+      // Inicializar o quiz
+      function initQuiz() {
+        currentQuestion = 0;
+        score = 0;
+        loadQuestion();
+      }
+
+      // Carregar pergunta atual
+      function loadQuestion() {
+        answered = false;
+        nextBtn.disabled = true;
+        const question = questions[currentQuestion];
+
+        // Atualizar progresso
+        progress.textContent = `Pergunta: ${currentQuestion + 1}/${
+          questions.length
+        }`;
+
+        // Definir texto da pergunta
+        questionText.textContent = question.question;
+
+        // Limpar e adicionar mídia
+        questionMedia.innerHTML = "";
+        if (question.media) {
+          let mediaElement;
+          if (question.media.type === "image") {
+            mediaElement = document.createElement("img");
+            mediaElement.className = "question-image";
+            mediaElement.src = question.media.src;
+            mediaElement.alt = "Imagem do sinal em LIBRAS";
+          } else if (question.media.type === "video") {
+            mediaElement = document.createElement("video");
+            mediaElement.className = "question-video";
+            mediaElement.src = question.media.src;
+            mediaElement.controls = true;
+            mediaElement.autoplay = true;
+            mediaElement.loop = true;
+            mediaElement.muted = true;
+          }
+          questionMedia.appendChild(mediaElement);
+        }
+
+        // Limpar e adicionar opções
+        optionsContainer.innerHTML = "";
+        const optionLetters = ["A", "B", "C", "D"];
+        question.options.forEach((option, index) => {
+          const optionElement = document.createElement("div");
+          optionElement.className = "option";
+          optionElement.innerHTML = `
+            <span class="option-prefix">${optionLetters[index]}</span>
+            <span class="option-text">${option.text}</span>
+          `;
+
+          optionElement.addEventListener("click", () =>
+            selectOption(optionElement, option.correct)
+          );
+          optionsContainer.appendChild(optionElement);
+        });
+      }
+
+      // Selecionar uma opção
+      function selectOption(optionElement, isCorrect) {
+        if (answered) return;
+        answered = true;
+
+        // Desabilitar todas as opções
+        document.querySelectorAll(".option").forEach((opt) => {
+          opt.classList.add("disabled");
+        });
+
+        // Marcar a opção selecionada como correta ou incorreta
+        if (isCorrect) {
+          optionElement.classList.add("correct");
+          score++;
+          showFeedback(true);
+        } else {
+          optionElement.classList.add("incorrect");
+          // Encontrar e marcar a opção correta
+          document.querySelectorAll(".option").forEach((opt) => {
+            if (
+              opt.querySelector(".option-text").textContent ===
+              questions[currentQuestion].options.find((opt) => opt.correct).text
+            ) {
+              opt.classList.add("correct");
+            }
+          });
+          showFeedback(false);
+        }
+
+        // Habilitar botão de próxima pergunta
+        nextBtn.disabled = false;
+      }
+
+      // Mostrar feedback
+      function showFeedback(isCorrect) {
+        notificationMessage.textContent = isCorrect
+          ? "Resposta Correta! 🎉"
+          : "Resposta Incorreta 😕";
+        notificationMessage.className = `notification-message ${
+          isCorrect ? "correct" : "incorrect"
+        }`;
+
+        const correctAnswer = questions[currentQuestion].options.find(
+          (opt) => opt.correct
+        ).text;
+        notificationDetails.innerHTML = isCorrect
+          ? "Parabéns! Você acertou a resposta."
+          : `A resposta correta é: <strong>${correctAnswer}</strong>`;
+
+        notificationOverlay.style.display = "flex";
+
+        // Limpar botões e adicionar apenas o de continuar
+        notificationButtons.innerHTML = "";
+        const continueBtn = document.createElement("button");
+        continueBtn.className = "notification-btn";
+        continueBtn.textContent = "Continuar";
+        continueBtn.addEventListener("click", () => {
+          notificationOverlay.style.display = "none";
+        });
+        notificationButtons.appendChild(continueBtn);
+      }
+
+      // Próxima pergunta
+      function nextQuestion() {
+        currentQuestion++;
+
+        if (currentQuestion < questions.length) {
+          loadQuestion();
+        } else {
+          showResult();
+        }
+      }
+
+      // Mostrar resultado final
+      function showResult() {
+        const percentage = Math.round((score / questions.length) * 100);
+        notificationMessage.textContent = "Quiz Concluído!";
+        notificationDetails.innerHTML = `
+          Você acertou <strong>${score}</strong> de <strong>${questions.length}</strong> perguntas<br>
+          (<strong>${percentage}%</strong> de acerto)
+        `;
+        notificationOverlay.style.display = "flex";
+
+        // Limpar botões e adicionar opções de jogar novamente e voltar
+        notificationButtons.innerHTML = "";
+        const playAgainBtn = document.createElement("button");
+        playAgainBtn.className = "notification-btn final";
+        playAgainBtn.textContent = "Jogar Novamente";
+        playAgainBtn.addEventListener("click", restartQuiz);
+
+        const backBtn = document.createElement("button");
+        backBtn.className = "notification-btn secondary";
+        backBtn.textContent = "Voltar aos Jogos";
+        backBtn.addEventListener("click", () => {
+          window.location.href = "jogosInicial.html";
+        });
+
+        notificationButtons.appendChild(playAgainBtn);
+        notificationButtons.appendChild(backBtn);
+      }
+
+      // Reiniciar o quiz
+      function restartQuiz() {
+        initQuiz();
+        notificationOverlay.style.display = "none";
+      }
+
+      // Event Listeners
+      startButton.addEventListener("click", () => {
+        startOverlay.style.opacity = "0";
+        startOverlay.style.pointerEvents = "none";
+        gameContainer.classList.remove("blurred");
+        initQuiz();
+      });
+
+      nextBtn.addEventListener("click", nextQuestion);
+
+      resetBtn.addEventListener("click", restartQuiz);
+
+      // Inicializar ao carregar a página
+      initQuiz();
+    </script>
+  </body>
+</html>
